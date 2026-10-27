@@ -413,3 +413,107 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   .atlas-nodes, .collection-tools, .collection-status { display: none; }
   .collection-row { break-inside: avoid; }
 }
+
+/* ───────── Instrument layer: patina categories, calibration, preview ─────────
+   Extends the bronze dial without changing its structure. Category colours are
+   patinas of the same metal, and they recur in the collection list below. */
+:root {
+  --patina-agents: #e0b87e;   /* polished gold */
+  --patina-systems: #d58b5f;  /* copper */
+  --patina-search: #8fb59c;   /* verdigris */
+  --patina-products: #bdb5a2; /* pewter */
+}
+
+/* Category bands engraved on the inner ring */
+.atlas-sector-arc { fill: none; stroke-width: 3.2; stroke-linecap: butt; opacity: .42; transition: opacity .35s ease, stroke-width .35s ease; }
+.atlas-sector-label { font: 500 8.4px var(--mono); letter-spacing: .22em; text-transform: uppercase; opacity: .55; transition: opacity .35s ease; }
+.atlas-sector.is-hint .atlas-sector-arc { opacity: .72; }
+.atlas-sector.is-hint .atlas-sector-label { opacity: .8; }
+.atlas-sector.is-active .atlas-sector-arc { opacity: 1; stroke-width: 4.2; }
+.atlas-sector.is-active .atlas-sector-label { opacity: 1; }
+.atlas-sector[data-category="agents"] { color: var(--patina-agents); }
+.atlas-sector[data-category="systems"] { color: var(--patina-systems); }
+.atlas-sector[data-category="search"] { color: var(--patina-search); }
+.atlas-sector[data-category="products"] { color: var(--patina-products); }
+.atlas-sector-arc { stroke: currentColor; }
+.atlas-sector-label { fill: currentColor; stroke: none; }
+
+/* Selected point takes its field's patina */
+.atlas-node[data-category="systems"].selected::before { background: var(--patina-systems); border-color: var(--patina-systems); }
+.atlas-node[data-category="search"].selected::before { background: var(--patina-search); border-color: var(--patina-search); }
+.atlas-node[data-category="products"].selected::before { background: var(--patina-products); border-color: var(--patina-products); }
+.atlas-node:focus-visible { outline: 1px solid #f0ddba; outline-offset: 1px; }
+
+/* Hover preview: the centre names the point under the cursor, set in italic
+   so it reads as provisional until the point is chosen. */
+.atlas-center .atlas-project { transition: color .2s ease; }
+.atlas-center.is-preview .atlas-project { font-style: italic; color: #d9bf98; }
+.atlas-center.is-preview .atlas-open { opacity: .45; }
+.atlas-open { transition: opacity .2s ease; }
+
+/* Calibration: the one orchestrated moment on the page.
+   Bezel settles, points light in order, the pointer sweeps once to 01. */
+@keyframes atlas-bezel-settle { from { transform: rotate(-14deg); opacity: 0; } to { transform: rotate(0); opacity: .55; } }
+@keyframes atlas-point-in { from { opacity: 0; transform: translate(-50%,-50%) scale(.35); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+@keyframes atlas-ray-sweep { from { transform: rotate(-360deg); } to { transform: rotate(0); } }
+@keyframes atlas-arc-draw { from { stroke-dashoffset: var(--arc-length); } to { stroke-dashoffset: 0; } }
+@keyframes atlas-fade-in { from { opacity: 0; } to { opacity: 1; } }
+.atlas-geometry > g > g:first-child { transform-origin: 300px 300px; animation: atlas-bezel-settle 1.5s cubic-bezier(.2,.7,.25,1) both; }
+.project-atlas .atlas-node { animation: atlas-point-in .55s cubic-bezier(.2,.8,.3,1.25) backwards; }
+.project-atlas .atlas-node:nth-child(1) { animation-delay: 260ms; }
+.project-atlas .atlas-node:nth-child(2) { animation-delay: 294ms; }
+.project-atlas .atlas-node:nth-child(3) { animation-delay: 328ms; }
+.project-atlas .atlas-node:nth-child(4) { animation-delay: 362ms; }
+.project-atlas .atlas-node:nth-child(5) { animation-delay: 396ms; }
+.project-atlas .atlas-node:nth-child(6) { animation-delay: 430ms; }
+.project-atlas .atlas-node:nth-child(7) { animation-delay: 464ms; }
+.project-atlas .atlas-node:nth-child(8) { animation-delay: 498ms; }
+.project-atlas .atlas-node:nth-child(9) { animation-delay: 532ms; }
+.project-atlas .atlas-node:nth-child(10) { animation-delay: 566ms; }
+.project-atlas .atlas-node:nth-child(11) { animation-delay: 600ms; }
+.project-atlas .atlas-node:nth-child(12) { animation-delay: 634ms; }
+.project-atlas .atlas-node:nth-child(13) { animation-delay: 668ms; }
+.project-atlas .atlas-node:nth-child(14) { animation-delay: 702ms; }
+.project-atlas .atlas-node:nth-child(15) { animation-delay: 736ms; }
+.project-atlas .atlas-node:nth-child(16) { animation-delay: 770ms; }
+.project-atlas .atlas-node:nth-child(17) { animation-delay: 804ms; }
+.project-atlas .atlas-node:nth-child(18) { animation-delay: 838ms; }
+.project-atlas .atlas-node:nth-child(19) { animation-delay: 872ms; }
+.project-atlas .atlas-node:nth-child(20) { animation-delay: 906ms; }
+.project-atlas .atlas-node:nth-child(21) { animation-delay: 940ms; }
+.project-atlas .atlas-node:nth-child(22) { animation-delay: 974ms; }
+.project-atlas .atlas-node:nth-child(23) { animation-delay: 1008ms; }
+.project-atlas .atlas-node:nth-child(24) { animation-delay: 1042ms; }
+.project-atlas .atlas-node:nth-child(25) { animation-delay: 1076ms; }
+.project-atlas .atlas-node:nth-child(26) { animation-delay: 1110ms; }
+.project-atlas .atlas-node:nth-child(27) { animation-delay: 1144ms; }
+.project-atlas .atlas-node:nth-child(28) { animation-delay: 1178ms; }
+.project-atlas .atlas-node:nth-child(29) { animation-delay: 1212ms; }
+.project-atlas .atlas-node:nth-child(30) { animation-delay: 1246ms; }
+.project-atlas .atlas-node:nth-child(31) { animation-delay: 1280ms; }
+.project-atlas .atlas-node:nth-child(32) { animation-delay: 1314ms; }
+.atlas-focus-ray { animation: atlas-ray-sweep 1.9s cubic-bezier(.45,.05,.2,1) .2s backwards; }
+.atlas-sector-arc { stroke-dasharray: var(--arc-length); animation: atlas-arc-draw 1s cubic-bezier(.3,.6,.2,1) both; animation-delay: calc(var(--sector-index) * 140ms + 450ms); }
+.atlas-sector-label { animation: atlas-fade-in .8s ease both; animation-delay: calc(var(--sector-index) * 140ms + 1050ms); }
+.atlas-center { animation: atlas-fade-in .9s ease 1.25s backwards; }
+
+/* The list below speaks the dial's colours */
+.collection-row[data-category="agents"] .category-mark { color: var(--patina-agents); }
+.collection-row[data-category="systems"] .category-mark { color: var(--patina-systems); }
+.collection-row[data-category="search"] .category-mark { color: var(--patina-search); }
+.collection-row[data-category="products"] .category-mark { color: var(--patina-products); }
+.collection-filters button:not([data-filter="all"])::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; background: var(--swatch); opacity: .8; }
+.collection-filters button[data-filter="agents"] { --swatch: var(--patina-agents); }
+.collection-filters button[data-filter="systems"] { --swatch: var(--patina-systems); }
+.collection-filters button[data-filter="search"] { --swatch: var(--patina-search); }
+.collection-filters button[data-filter="products"] { --swatch: var(--patina-products); }
+
+@media (max-width: 700px) {
+  .atlas-sector-label { display: none; }
+  .atlas-sector-arc { stroke-width: 4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atlas-geometry > g > g:first-child, .project-atlas .atlas-node, .atlas-focus-ray,
+  .atlas-sector-arc, .atlas-sector-label, .atlas-center { animation: none; }
+  .atlas-sector-arc, .atlas-sector-label, .atlas-open, .atlas-center .atlas-project { transition: none; }
+}

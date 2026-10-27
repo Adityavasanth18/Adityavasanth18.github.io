@@ -362,3 +362,139 @@ window.EXPLORER_STATES = {
     });
   });
 })();
+
+
+// Instrument layer: category bands on the dial, a hover preview in its
+// centre, and "/" to jump to the project search.
+(() => {
+  const atlas = document.querySelector(".project-atlas");
+  const svg = atlas && atlas.querySelector(".atlas-geometry");
+  const nodes = atlas ? [...atlas.querySelectorAll("[data-project-select]")] : [];
+  if (svg && nodes.length) {
+    const NS = "http://www.w3.org/2000/svg";
+    const C = 300;
+    const step = 360 / nodes.length;
+    const categoryOf = {};
+    document.querySelectorAll(".collection-row").forEach((row) => {
+      categoryOf[row.id.replace(/^project-/, "")] = row.dataset.category;
+    });
+    nodes.forEach((node) => {
+      const category = categoryOf[node.dataset.projectSelect];
+      if (category) node.dataset.category = category;
+    });
+
+    // Group consecutive points that share a field into one band.
+    const groups = [];
+    nodes.forEach((node, i) => {
+      const last = groups[groups.length - 1];
+      if (last && last.category === node.dataset.category) last.end = i;
+      else groups.push({ category: node.dataset.category, label: node.dataset.field, start: i, end: i });
+    });
+
+    const point = (r, deg) => {
+      const a = ((deg - 90) * Math.PI) / 180;
+      return [C + r * Math.cos(a), C + r * Math.sin(a)];
+    };
+    const arcPath = (r, from, to, reverse) => {
+      const [x1, y1] = point(r, reverse ? to : from);
+      const [x2, y2] = point(r, reverse ? from : to);
+      const large = to - from > 180 ? 1 : 0;
+      return `M${x1.toFixed(2)} ${y1.toFixed(2)}A${r} ${r} 0 ${large} ${reverse ? 0 : 1} ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+    };
+
+    const layer = document.createElementNS(NS, "g");
+    layer.setAttribute("class", "atlas-sectors");
+    layer.setAttribute("aria-hidden", "true");
+    const defs = svg.querySelector("defs") || svg.insertBefore(document.createElementNS(NS, "defs"), svg.firstChild);
+    const gap = Math.min(2.4, step * 0.18);
+
+    groups.forEach((group, index) => {
+      if (!group.category) return;
+      const from = (group.start - 0.5) * step + gap;
+      const to = (group.end + 0.5) * step - gap;
+      const g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "atlas-sector");
+      g.dataset.category = group.category;
+      g.style.setProperty("--sector-index", index);
+
+      const arc = document.createElementNS(NS, "path");
+      const r = 224.5;
+      arc.setAttribute("d", arcPath(r, from, to, false));
+      arc.setAttribute("class", "atlas-sector-arc");
+      arc.style.setProperty("--arc-length", ((Math.PI * r * (to - from)) / 180).toFixed(1));
+      g.appendChild(arc);
+
+      // Labels on the lower half run the other way so they never read upside down.
+      const mid = (((from + to) / 2) % 360 + 360) % 360;
+      const lower = mid > 90 && mid < 270;
+      const labelR = lower ? 209 : 203;
+      const guide = document.createElementNS(NS, "path");
+      guide.id = `atlas-sector-path-${group.category}`;
+      guide.setAttribute("d", arcPath(labelR, from, to, lower));
+      defs.appendChild(guide);
+      const text = document.createElementNS(NS, "text");
+      text.setAttribute("class", "atlas-sector-label");
+      const textPath = document.createElementNS(NS, "textPath");
+      textPath.setAttribute("href", `#${guide.id}`);
+      textPath.setAttribute("startOffset", "50%");
+      textPath.setAttribute("text-anchor", "middle");
+      textPath.textContent = (group.label || "").replace(/&amp;/g, "&");
+      text.appendChild(textPath);
+      g.appendChild(text);
+      layer.appendChild(g);
+    });
+    const ray = svg.querySelector(".atlas-focus-ray");
+    ray ? ray.parentNode.insertBefore(layer, ray) : svg.appendChild(layer);
+
+    const sectors = [...layer.querySelectorAll(".atlas-sector")];
+    const mark = (category, cls) =>
+      sectors.forEach((s) => s.classList.toggle(cls, s.dataset.category === category));
+    const syncActive = () => {
+      const selected = atlas.querySelector(".atlas-node.selected");
+      mark(selected && selected.dataset.category, "is-active");
+    };
+    syncActive();
+
+    // Preview the point under the cursor; the chosen point returns on leave.
+    const center = atlas.querySelector(".atlas-center");
+    const title = atlas.querySelector(".atlas-project");
+    const field = atlas.querySelector(".atlas-field");
+    const count = atlas.querySelector(".atlas-count");
+    const show = (node) => {
+      const i = nodes.indexOf(node);
+      title.textContent = node.dataset.name;
+      field.textContent = node.dataset.field;
+      if (count) count.textContent = `${String(i + 1).padStart(2, "0")} / ${nodes.length}`;
+    };
+    const restore = () => {
+      center.classList.remove("is-preview");
+      mark(null, "is-hint");
+      const selected = atlas.querySelector(".atlas-node.selected");
+      if (selected) show(selected);
+    };
+    nodes.forEach((node) => {
+      node.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "mouse" || node.classList.contains("selected")) return;
+        show(node);
+        center.classList.add("is-preview");
+        mark(node.dataset.category, "is-hint");
+      });
+      node.addEventListener("pointerleave", restore);
+      node.addEventListener("click", () => { restore(); syncActive(); });
+      node.addEventListener("keydown", () => requestAnimationFrame(syncActive));
+    });
+  }
+
+  // "/" jumps to the project search, as on most code hosts.
+  const search = document.getElementById("project-search");
+  if (search) {
+    search.setAttribute("aria-keyshortcuts", "/");
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "/" || event.metaKey || event.ctrlKey || event.altKey) return;
+      const t = event.target;
+      if (t.closest && t.closest("input, textarea, select, [contenteditable]")) return;
+      event.preventDefault();
+      search.focus();
+    });
+  }
+})();
