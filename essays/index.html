@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Aditya Speaks — Philosophy, Consciousness & Other Obsessions</title>
+<meta name="description" content="Essays by Aditya Devarakonda on consciousness, Vedānta, the Mahabharata, cognitive science, and the books that keep him up at night."/>
+<link rel="canonical" href="https://adityavasanth18.github.io/essays/"/>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"/>
+<meta name="theme-color" content="#0d0a07"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --s:#c8692a;--ds:#a0471c;--cr:#faf7f2;--pa:#ede3cf;--ink:#1a1410;
+  --mi:#3d3020;--li:#7a6a52;--g:#c9a84c;--gl:#e2c97e;--b:#d4b896;
+  --dark:#0d0a07;--card:#ffffff;--accent:#e8f0fe;--tag-bg:#1a1410;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cr);color:var(--ink);line-height:1.7;font-size:16px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,10,7,0.96);backdrop-filter:blur(12px);
+  padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;
+  height:60px;border-bottom:1px solid rgba(201,168,76,.2);
+}
+.nb{font-family:'Cinzel',serif;font-size:1rem;color:var(--g);letter-spacing:.14em;text-decoration:none;display:flex;align-items:center;gap:.6rem}
+.nb-dot{width:6px;height:6px;background:var(--s);border-radius:50%;display:inline-block}
+.nl{display:flex;gap:0;list-style:none;align-items:center}
+.nl a{font-size:.72rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);text-decoration:none;transition:color .25s;padding:.4rem .9rem}
+.nl a:hover{color:var(--g)}
+.nl-cta{background:var(--s);color:#fff!important;padding:.35rem .9rem!important;margin-left:.5rem;transition:background .25s!important}
+.nl-cta:hover{background:var(--ds)!important}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:5rem 2rem 4rem;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.38) saturate(1.1)}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(13,10,7,.65) 0%,rgba(13,10,7,.3) 50%,rgba(13,10,7,.8) 100%);
+}
+.hero-content{position:relative;z-index:1}
+.hero-name{
+  font-family:'Cinzel',serif;font-size:clamp(2.8rem,7vw,6rem);font-weight:600;
+  color:#fff;line-height:1.05;margin-bottom:.5rem;
+  text-shadow:0 2px 40px rgba(0,0,0,.4);
+}
+.hero-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(1.1rem,2.5vw,1.55rem);color:var(--gl);
+  margin-bottom:2.5rem;letter-spacing:.04em;
+}
+.hero-divider{width:50px;height:2px;background:linear-gradient(to right,transparent,var(--g),transparent);margin:0 auto 2rem}
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--g);font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;
+  font-family:'Inter',sans-serif;animation:bob 2.5s ease-in-out infinite;z-index:1;
+}
+.scroll-hint::after{content:'';width:1px;height:36px;background:linear-gradient(to bottom,var(--g),transparent)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+
+/* ── ABOUT SECTION ── */
+.about-section{
+  background:var(--dark);padding:5rem 2rem;
+  border-top:1px solid rgba(201,168,76,.15);border-bottom:1px solid rgba(201,168,76,.15);
+}
+.about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-img-wrap{position:relative}
+.about-img{
+  width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;
+  filter:grayscale(15%) contrast(1.05);
+  border:1px solid rgba(201,168,76,.2);
+}
+.about-img-badge{
+  position:absolute;bottom:-1px;right:-1px;
+  background:var(--s);color:#fff;padding:.7rem 1rem;
+  font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+  font-family:'Inter',sans-serif;font-weight:500;
+  line-height:1.5;
+}
+.about-text .eyebrow{
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--g);font-family:'Inter',sans-serif;margin-bottom:1rem;
+}
+.about-text h2{
+  font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,2.8rem);
+  color:#fff;line-height:1.25;margin-bottom:1.5rem;
+}
+.about-text p{color:rgba(255,255,255,.65);font-size:1rem;line-height:1.9;margin-bottom:1.2rem}
+.about-text p strong{color:var(--gl);font-weight:500}
+.about-text p em{color:rgba(255,255,255,.5);font-style:italic}
+.about-links{display:flex;gap:1rem;margin-top:1.8rem;flex-wrap:wrap}
+.about-link{
+  font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--g);border:1px solid rgba(201,168,76,.4);padding:.5rem 1.1rem;
+  text-decoration:none;font-family:'Inter',sans-serif;transition:all .25s;
+}
+.about-link:hover{background:var(--g);color:var(--dark)}
+.about-link.filled{background:var(--s);color:#fff;border-color:var(--s)}
+.about-link.filled:hover{background:var(--ds);border-color:var(--ds)}
+
+/* ── BLOG SECTION ── */
+.blog-section{padding:5rem 2rem;max-width:1260px;margin:0 auto}
+.section-head{text-align:center;margin-bottom:3.5rem}
+.section-head .ey{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--s);font-family:'Inter',sans-serif;margin-bottom:.8rem}
+.section-head h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--mi);margin-bottom:.8rem}
+.section-head .sub{font-style:italic;color:var(--li);font-size:1rem;font-family:'Cormorant Garamond',serif;font-size:1.15rem}
+.orn{margin:1rem auto 0;display:flex;align-items:center;justify-content:center;gap:.8rem;color:var(--g)}
+.orn::before,.orn::after{content:'';width:50px;height:1px;background:var(--g)}
+
+/* Filter tabs */
+.filter-tabs{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-bottom:3rem}
+.ftab{
+  font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+  border:1px solid var(--b);background:none;padding:.45rem 1rem;cursor:pointer;
+  font-family:'Inter',sans-serif;color:var(--li);transition:all .2s;
+}
+.ftab.active,.ftab:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Featured post */
+.featured{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  margin-bottom:3rem;border:1px solid var(--b);overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,.08);
+  cursor:pointer;transition:transform .3s,box-shadow .3s;
+}
+.featured:hover{transform:translateY(-4px);box-shadow:0 16px 50px rgba(0,0,0,.13)}
+.featured:hover .fi img{transform:scale(1.04)}
+.fi{overflow:hidden;height:440px}
+.fi img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
+.fb-body{background:#fff;padding:3rem;display:flex;flex-direction:column;justify-content:center}
+.featured-badge{
+  display:inline-block;background:var(--s);color:#fff;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  padding:.35rem .8rem;font-family:'Inter',sans-serif;margin-bottom:1.2rem;width:fit-content;
+}
+.fb-tag{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--g);font-family:'Inter',sans-serif;margin-bottom:.6rem}
+.fb-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);line-height:1.3;color:var(--mi);margin-bottom:1rem}
+.fb-date{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--li);font-family:'Inter',sans-serif;margin-bottom:1rem}
+.fb-excerpt{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--li);line-height:1.8;font-style:italic;margin-bottom:1.5rem}
+.read-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--s);font-family:'Inter',sans-serif;font-weight:500;
+  border:none;background:none;cursor:pointer;padding:0;
+  transition:gap .2s;
+}
+.read-btn:hover{gap:.8rem;color:var(--ds)}
+
+/* Blog grid */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:2rem}
+.bc{
+  background:var(--card);border:1px solid var(--b);
+  overflow:hidden;cursor:pointer;transition:transform .3s,box-shadow .3s;
+  display:flex;flex-direction:column;
+}
+.bc:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,.1)}
+.bc:hover .ci img{transform:scale(1.05)}
+.ci{height:200px;overflow:hidden;position:relative}
+.ci img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.ci .cat-tag{
+  position:absolute;top:12px;left:12px;
+  background:var(--dark);color:var(--gl);
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.35rem .8rem;font-family:'Inter',sans-serif;
+}
+.ci .read-time{
+  position:absolute;bottom:12px;right:12px;
+  background:rgba(0,0,0,.6);color:rgba(255,255,255,.8);
+  font-size:.62rem;letter-spacing:.1em;padding:.25rem .6rem;font-family:'Inter',sans-serif;
+}
+.cb{padding:1.5rem 1.6rem 1.8rem;flex:1;display:flex;flex-direction:column}
+.cd{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--li);font-family:'Inter',sans-serif;margin-bottom:.6rem}
+.ct{font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.4;color:var(--mi);margin-bottom:.8rem}
+.cx{font-size:.92rem;color:var(--li);line-height:1.72;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;flex:1}
+.cr-btn{
+  margin-top:1.2rem;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--s);font-family:'Inter',sans-serif;font-weight:500;
+  border:none;background:none;cursor:pointer;padding:0;text-align:left;
+  display:inline-flex;align-items:center;gap:.4rem;transition:gap .2s;
+}
+.cr-btn:hover{gap:.7rem;color:var(--ds)}
+
+/* ── MODAL ── */
+.mo{display:none;position:fixed;inset:0;background:rgba(6,4,2,.92);z-index:200;overflow-y:auto;padding:2rem 1rem;backdrop-filter:blur(8px)}
+.mo.open{display:block}
+.md{max-width:820px;margin:2rem auto;background:var(--cr)}
+.mh{height:360px;overflow:hidden;position:relative}
+.mh img{width:100%;height:100%;object-fit:cover;filter:brightness(.65)}
+.mht{position:absolute;bottom:0;left:0;right:0;padding:2rem 2.8rem;background:linear-gradient(to top,rgba(8,5,2,.94),transparent)}
+.mht .tg{font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--g);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.mht .tg::before{content:'';width:20px;height:1px;background:var(--g)}
+.mht h1{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3.5vw,2.1rem);color:#fff;line-height:1.3}
+.mb{padding:2.8rem 3.5rem 4rem}
+.mm{
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--li);
+  margin-bottom:2rem;padding-bottom:1.3rem;border-bottom:1px solid var(--b);
+  font-family:'Inter',sans-serif;display:flex;align-items:center;gap:1.5rem;
+}
+.mm span{display:flex;align-items:center;gap:.4rem}
+.mb p{margin-bottom:1.5rem;font-size:1.05rem;line-height:2.05;color:var(--ink);font-family:'Cormorant Garamond',serif;font-size:1.12rem}
+.mb p:first-of-type::first-letter{float:left;font-family:'Cinzel',serif;font-size:4.5rem;line-height:.7;margin-right:.07em;margin-top:.15em;color:var(--s)}
+.mc-btn{position:fixed;top:1.2rem;right:1.5rem;width:46px;height:46px;border:1px solid rgba(201,168,76,.35);background:rgba(10,7,4,.9);color:var(--g);font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:210;transition:background .2s;font-family:sans-serif}
+.mc-btn:hover{background:rgba(201,168,76,.15)}
+.pq{border-left:3px solid var(--g);margin:2.2rem 0;padding:1rem 1.8rem;font-style:italic;font-size:1.2rem;color:var(--mi);background:rgba(201,168,76,.06);line-height:1.8;font-family:'Cormorant Garamond',serif}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:rgba(255,255,255,.4);text-align:center;padding:4rem 2rem;border-top:1px solid rgba(201,168,76,.12)}
+.fb2{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--g);margin-bottom:1rem}
+.footer-links{display:flex;justify-content:center;gap:1.5rem;list-style:none;margin-bottom:1.5rem}
+.footer-links a{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);text-decoration:none;font-family:'Inter',sans-serif;transition:color .25s}
+.footer-links a:hover{color:var(--g)}
+.fq{font-style:italic;color:var(--gl);font-size:1rem;margin:.8rem auto 1.2rem;max-width:480px;font-family:'Cormorant Garamond',serif;line-height:1.7}
+footer p.copy{font-size:.78rem;line-height:1.9}
+
+
+/* ── SITE SWITCH: the same person, two desks ── */
+.site-switch{display:flex;align-items:center;gap:.55rem;margin-left:auto;margin-right:1.4rem}
+.switch-side{font-family:'Inter',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none;padding:.5rem 0;transition:color .25s}
+.switch-side[aria-current="page"]{color:var(--gl)}
+.switch-side:hover{color:#fff}
+.switch-track{position:relative;display:block;width:34px;height:16px;border:1px solid rgba(201,168,76,.45);border-radius:999px}
+.switch-knob{position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:var(--g);box-shadow:0 0 0 3px rgba(201,168,76,.14);transition:transform .22s cubic-bezier(.3,.7,.3,1)}
+.site-switch .switch-knob{transform:translateX(18px)}
+.site-switch.hint-other .switch-knob{transform:translateX(14px)}
+.site-switch.is-switching .switch-knob{transform:translateX(0)}
+.switch-side:focus-visible,.switch-track:focus-visible{outline:1px solid var(--gl);outline-offset:3px}
+@media(max-width:600px){nav{padding:0 1.1rem}.nb{white-space:nowrap;font-size:.9rem}.site-switch{margin-right:0;gap:.4rem}.switch-side{font-size:.6rem;letter-spacing:.1em}.nl{display:none}}
+@media(prefers-reduced-motion:reduce){.scroll-hint{animation:none}.switch-knob{transition:none}}
+
+@media(max-width:860px){
+  .about-inner{grid-template-columns:1fr}
+  .about-img{aspect-ratio:4/3}
+  .featured{grid-template-columns:1fr}
+  .fi{height:260px}
+  .fb-body{padding:2rem}
+}
+@media(max-width:600px){
+  .nl li:not(:last-child){display:none}
+  .blog-grid{grid-template-columns:1fr}
+  .mb{padding:1.6rem 1.5rem 2.5rem}
+  .mh{height:220px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nb" href="#"><span class="nb-dot"></span>Aditya Speaks</a>
+  <div class="site-switch" role="navigation" aria-label="Choose a site"><a class="switch-side" href="/" data-side="work">Work</a><a class="switch-track" href="/" aria-hidden="true" tabindex="-1"><span class="switch-knob"></span></a><a class="switch-side" href="/essays/" data-side="essays" aria-current="page">Essays</a></div>
+  <ul class="nl">
+    <li><a href="#blog">Essays</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="mailto:adityadevarakonda2003@gmail.com" class="nl-cta">Email me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO with Aditya's photo -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="images/hero.jpg" alt="Aditya Devarakonda at Times Square" fetchpriority="high"/>
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-name">Aditya Speaks</h1>
+    <p class="hero-sub">Philosophy, Consciousness &amp; Other Expensive Hobbies</p>
+    <div class="hero-divider"></div>
+  </div>
+  <div class="scroll-hint">Read</div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-img-wrap">
+      <img class="about-img" loading="lazy" src="images/portrait.jpg" alt="Aditya Devarakonda"/>
+      <div class="about-img-badge">M.S. Computer Science, UMBC<br/>Philosopher by Night</div>
+    </div>
+    <div class="about-text">
+      <p class="eyebrow">About the Human Behind This</p>
+      <h2>Hi, I'm Aditya. I'm supposed to be thinking about algorithms.</h2>
+      <p>I'm a <strong>software engineer with a master's in Computer Science from the University of Maryland, Baltimore County</strong> — which means I spend my days doing things like optimizing gradient descent and my nights wondering whether the entity doing the optimizing has genuine phenomenal experience or is just very sophisticated symbol manipulation. Both questions keep me up equally.</p>
+      <p>My <strong>real obsession</strong>, the one I can't shake no matter how many deadlines loom, is the intersection of ancient Indian philosophical thought and contemporary cognitive science. I'm the kind of person who reads the <strong>Mahabharata</strong> the way others read thrillers — in great hungry gulps, completely unable to stop. The epic is, among other things, a 100,000-verse meditation on consciousness, moral catastrophe, and the impossibility of clean choices. It's also the most entertaining thing ever written. Fight me.</p>
+      <p>I'm particularly obsessed with <strong>Sanskrit literature and Vedantic philosophy</strong> — Śaṅkara's Advaita, the Nyāya logicians, Kashmir Śaivism. I find that these traditions have been thinking rigorously about the nature of mind and consciousness for two millennia, and it's a minor scandal that most Western philosophy of mind departments have never heard of the sākṣin or the spanda doctrine.</p>
+      <p><em>This blog is my attempt to think out loud. Some of it is scholarly (ish). Some of it is personal. All of it is sincere. Caveat lector.</em></p>
+      <div class="about-links">
+        <a href="#blog" class="about-link filled">Read Essays</a>
+        <a href="mailto:adityadevarakonda2003@gmail.com" class="about-link">Email Me</a>
+        <a href="/" class="about-link">See my engineering work</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="blog-section" id="blog">
+  <div class="section-head">
+    <p class="ey">Writing</p>
+    <h2>Essays &amp; Journal Entries</h2>
+    <p class="sub">On philosophy, consciousness, Sanskrit epics, and the occasional book review</p>
+    <div class="orn">&#10022;</div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="ftab active" data-filter="all">All</button>
+    <button class="ftab" data-filter="vedanta">Vedānta</button>
+    <button class="ftab" data-filter="mahabharata">Mahabharata</button>
+    <button class="ftab" data-filter="cogscience">Cog Science</button>
+    <button class="ftab" data-filter="bookreview">Book Reviews</button>
+    <button class="ftab" data-filter="logic">Logic &amp; Mind</button>
+  </div>
+
+  <div id="featuredWrap"></div>
+  <div class="blog-grid" id="blogGrid"></div>
+</section>
+
+<!-- MODAL -->
+<div class="mo" id="mo" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
+  <button class="mc-btn" id="mc" aria-label="Close essay">&#10005;</button>
+  <div class="md">
+    <div class="mh"><img id="mImg" src="" alt=""/><div class="mht"><div class="tg" id="mTag"></div><h1 id="mTitle"></h1></div></div>
+    <div class="mb">
+      <div class="mm" id="mMeta"></div>
+      <div id="mContent"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fb2">Aditya Speaks</div>
+  <ul class="footer-links">
+    <li><a href="#blog">Essays</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="mailto:adityadevarakonda2003@gmail.com">Contact</a></li>
+    <li><a href="/">Engineering work</a></li>
+  </ul>
+  <p class="fq">"That which cannot be spoken of in words, but by which, they say, words are expressed — know that alone as Brahman." — Kena Upaniṣad</p>
+  <p class="copy">&#169; 2026 Aditya Devarakonda &nbsp;&#183;&nbsp; Made with excessive footnotes and insufficient sleep</p>
+</footer>
+
+<script>
+const posts = [
+  {
+    id:11, filter:"cogscience",
+    date:"February 2, 2026", readTime:"10 min read", tag:"Cognitive Science",
+    title:"The Bayesian Brain, the Embodied Mind, and the Ghost That Refuses to Leave",
+    excerpt:"Predictive processing, enactivism, and the hard problem all walk into a seminar room. Nobody agrees. I've been thinking about why, and what the disagreement actually reveals about what we want from a theory of mind.",
+    img:"images/essay-the-bayesian-brain-the-embodied.jpg",
+    content:`<p>I've been sitting in a graduate seminar on philosophy of cognitive science this semester, and the experience has been, I want to say clarifying, but that might be too optimistic. Clarifying about what the disagreements are, certainly. The seminar brings together people from computer science, neuroscience, and philosophy, and what I've discovered is that we all use the word "mind" with perfect confidence and mean almost entirely different things by it. This is apparently fine, and we are all getting course credit for it.</p>
+<div class="pq">"The Bayesian brain hypothesis and the enactivist tradition are both right about something important and wrong about something important. The tragedy is that they are wrong about different things, which makes synthesizing them feel like trying to merge two different maps of the same city drawn at different scales."</div>
+<p>Let me back up. The seminar is structured around what the syllabus calls "the three faces of the embodied mind", predictive processing (PP), enactivism, and extended mind theory. These are presented as related but distinct positions, all broadly opposed to classical computational cognitive science of the GOFAI variety. They share a rejection of the brain-as-input-output-device model. Beyond that, the consensus frays rapidly.</p>
+<p>Predictive processing, in the versions associated with Andy Clark, Karl Friston, and Jakob Hohwy, holds that the brain is fundamentally a prediction machine. It maintains a hierarchical generative model of the environment and uses incoming sensory signals primarily to correct prediction errors, not to passively receive and process raw data. Perception, on this view, is top-down inference: what you experience is your brain's best hypothesis about the causes of its sensory signals, constantly revised in light of new evidence. This is genuinely a revolutionary picture of cognition, and I think it's substantially correct or at least, it's the most empirically serious framework we currently have for thinking about how brains generate experience.</p>
+<p>Enactivism, associated with Francisco Varela, Evan Thompson, and Eleanor Rosch, and developed more recently by Alva Noë and others, insists that cognition is not something that happens inside the brain at all. It is constituted by the dynamic coupling between organism and environment. A creature doesn't represent the world and then act on those representations; the creature's cognitive life is precisely its ongoing, embodied engagement with its surroundings. The famous example is color perception: colors are not properties of objects that the brain detects and represents; they are relational properties that emerge in the interaction between an organism's sensory system and the reflective properties of surfaces under particular illumination conditions. Change the organism, change the colors.</p>
+<p>The tension between these frameworks is real and philosophically important. The PP theorist tends to be a representationalist: the brain's generative model is a model of something, it has intentional content, it represents possible states of the world. The enactivist resists this picture precisely because it reinstates the brain as the locus of cognition and demotes the body and environment to mere causal inputs. For the enactivist, you can't understand cognition by studying the brain in isolation any more than you can understand digestion by studying the stomach in isolation from the food it processes and the whole metabolic system it serves.</p>
+<p>There is a synthesis position: Clark's extended mind thesis, developed with David Chalmers, which argues that cognitive processes can extend beyond the skin. When I use a notebook to remember things, the notebook is (on this view) literally part of my cognitive system, not just a tool I use. The cognitive process of remembering extends into the world. This is clever and counterintuitive and has generated an enormous amount of philosophical discussion, most of it extremely good-natured given how much the thesis annoys people.</p>
+<p>What strikes me, coming to all of this from Indian philosophy, is how much of this debate is recapitulating, with better empirical tools and worse Sanskrit; a set of arguments that the Buddhist and Vedāntic traditions have been having for two millennia. The PP framework's representationalism echoes, in important ways, the Sarvāstivāda Buddhist school's commitment to internal mental representations as the vehicles of cognition. The enactivist critique of representation echoes Nāgārjuna's argument that no internal state can be fully self-sufficient, that all cognitive states are dependently arisen, relational, and therefore not adequately characterized by their internal properties alone.</p>
+<p>And then there is the hard problem, which refuses to go away no matter how sophisticated the framework. Predictive processing, extended mind theory, enactivism, all of these are third-person accounts. They describe, with varying degrees of sophistication, the functional and computational and dynamical properties of cognitive systems. None of them explains why any of this is accompanied by phenomenal experience at all. Why is there something it is like to be a predictive processing system? Why does the Bayesian updating happen in the light of experience rather than just happening in the dark?</p>
+<p>The honest answer, which I have arrived at after a semester of seminars and a longer stretch of reading Indian philosophy, is that I don't think the hard problem is going to be solved by any third-person theory of mind, however sophisticated. The Advaita Vedānta tradition's insight, that consciousness is the one thing that cannot be fully objectified because it is always already the objectifier, seems to me not a mystical evasion but a precise philosophical claim about the limits of the scientific method when applied to the very instrument that conducts the science. Whether that insight can be made consistent with a naturalistically respectable account of how brains work is, I think, the most important open question in cognitive science. I don't have an answer. But I'm very glad the question is there.</p>`
+  },
+  {
+    id:1, featured:true, filter:"vedanta",
+    date:"March 14, 2024", readTime:"9 min read", tag:"Vedānta · Debate",
+    title:"The Great Debate: Śaṅkara and Maṇḍana Miśra",
+    excerpt:"When the most formidable Mīmāṃsaka scholar faced the wandering monk of Advaita, the stakes were nothing less than the future direction of Indian philosophy, and the judge was the scholar's own wife.",
+    img:"images/essay-the-great-debate-sankara-and.jpg",
+    content:`<p>I've been sitting with this story for years, and I still find it quietly astonishing. Somewhere around the early eighth century CE, on the banks of the Māhiṣmatī river, there took place an intellectual encounter that Indian philosophical tradition still speaks of in hushed, reverent tones. On one side stood Maṇḍana Miśra, arguably the greatest scholar of Pūrva Mīmāṃsā of his age, a householder of impeccable orthodoxy, a man whose learning was so vast that, legend has it, even the parrots in his courtyard debated grammar and epistemology. (I genuinely cannot tell you whether this is meant to be literal. I choose to believe it is.) On the other stood Śaṅkarācārya, the young itinerant monk from Kerala, barely in his twenties, who had already begun shaking the foundations of rival schools with his Advaita Vedānta.</p>
+<div class="pq">"The judge of this debate was no ordinary moderator, it was Maṇḍana's own wife, Ubhaya Bhāratī, whose philosophical acuity was acknowledged to surpass that of most male scholars of the era."</div>
+<p>The debate, as narrated in hagiographies like the Śaṅkara-digvijaya attributed to Mādhava, was agreed to last until the garland of fresh flowers around the neck of one debater wilted: a poetic and organic timer for what would turn out to be one of the most consequential intellectual contests in Indian history. Maṇḍana championed Karma: Vedic ritual action is the supreme means to liberation, the Self's multiplicity is real, and the world of action, of dharma and adharma is not māyā but the very arena in which the human spirit must work out its destiny.</p>
+<p>Śaṅkara countered with the blade of Advaita: Brahman alone is real, the appearance of multiplicity is beginningless ignorance (avidyā), and liberation comes not through action but through knowledge. Jñāna — the non-dual recognition that ātman is Brahman. This was not a dismissal of ritual. It was a hierarchical subordination of the means to the end, of the path to the destination that transcends paths entirely.</p>
+<p>What makes this encounter philosophically electric, beyond its legendary theatre, is the deep problem it surfaces: the relationship between consciousness and action. Maṇḍana's position rests on the irreducibility of the agent, the kartā, the one who acts: and on the premise that consciousness is always embedded in temporal, intentional activity. To be conscious, on this view, is always to be conscious of something, for something, from somewhere. Śaṅkara's response dissolves the agent: from the standpoint of ultimate truth, the very sense of "I do" is an error superimposed on pure, actionless awareness.</p>
+<p>The debate stretched over many days. Maṇḍana proved a formidable opponent. But gradually, the tide turned, Śaṅkara's dialectical mastery, his ability to demonstrate internal contradictions in the Mīmāṃsaka framework, his devastating use of reductio ad absurdum, wore down the defenses.</p>
+<p>Then came the second act, which I love unreservedly. When Maṇḍana was on the verge of conceding, Ubhaya Bhāratī intervened. She argued that Maṇḍana and she were, as a married couple, philosophically one unit, and that Śaṅkara could not be declared the victor until he had also defeated her. She then posed questions not about Advaita metaphysics but about the science of erotic love and householder life, domains in which a renunciant monk could have no direct experience.</p>
+<p>Śaṅkara asked for a recess. He then temporarily inhabited the body of a recently deceased king; through the yogic power of parakāyapraveśa, to gain the necessary experiential knowledge. The philosophical implication here is not supernatural spectacle but something subtler: a meditation on the nature of consciousness. Can pure awareness inhabit multiple bodies? Is individual identity fixed or fluid? Is experience always tethered to a specific body, or can consciousness, in principle, be untethered? These questions, raised almost playfully by the narrative's structure, cut to the very heart of what Advaita is claiming.</p>
+<p>Śaṅkara returned, answered her questions, and was declared the winner. Maṇḍana became his disciple, taking the name Sureśvara. The legend ends with triumph. But the philosophical conversation it encodes, about consciousness, agency, embodiment, and liberation, has never really concluded. It continues in every serious inquiry into the nature of mind, including, I suspect, in whatever you were thinking about before you clicked on this essay.</p>`
+  },
+  {
+    id:2, filter:"vedanta",
+    date:"June 3, 2024", readTime:"8 min read", tag:"Advaita Vedānta",
+    title:"The Witness That Watches: On the Sākṣin",
+    excerpt:"What does Śaṅkara mean when he says the self is the witness of all mental states, yet is itself never witnessed? A personal meditation on the most vertiginous idea in Indian philosophy.",
+    img:"images/essay-the-witness-that-watches-on.jpg",
+    content:`<p>I want to tell you about the strangest loop in philosophy. The sākṣin, the witness, is the concept in Advaita Vedānta that I find myself returning to more than any other, because it has this peculiar quality of being both utterly obvious and completely impossible to grasp. Every time I think I've understood it, I realize the understanding is itself an object of the sākṣin, which means I'm back at square one. Which is, arguably, the point.</p>
+<div class="pq">"The witness never becomes an object. Every attempt to grasp it only reveals another object: which is itself already being witnessed by the same primordial light that you were trying to catch."</div>
+<p>Here is the basic claim. The sākṣin is not the ego, not the intellect (buddhi), not the sense-apparatus. It is pure, unconditioned consciousness that illumines all mental events without being modified by any of them. It is the light in which waking, dreaming, and deep sleep all appear, and which persists through all three states without belonging to any single one of them. In my more ambitious moments, I think this is one of the great ideas of human civilization. In my more honest moments, I wonder if I'm just entranced by the packaging.</p>
+<p>The epistemological consequence is genuinely staggering. If the witness cannot itself be witnessed, if every attempt to objectify it only produces another object that is itself already being observed, then the ultimate subject is self-luminous (svaprakāśa). It doesn't require a second illuminating principle. To say "I know that I am conscious" is redundant: the knowing and the being-known collapse into a single, self-evident fact. This is what the Māṇḍūkya Upaniṣad gestures at with turīya — not a fourth state but the awareness in which all states arise and pass away without leaving a mark on the awareness itself.</p>
+<p>The standard objection, one I find genuinely difficult to dismiss, is: how do we know the witness is singular? Perhaps what we call consciousness is actually a complex of many momentary awarenesses, a stream rather than a ground. The Buddhist school of Vijñānavāda comes tantalizingly close to the Advaita position but stops short: consciousness is real, but it is still momentary, still causally structured, still caught in dependent origination.</p>
+<p>Śaṅkara's response, elaborated by his disciple Padmapāda, is that the very experience of temporal succession presupposes an awareness that is not itself temporal. Something must hold the "before" and "after" together in a single cognitive grasp for us to perceive succession at all. That holding is the function of the witness. And the witness, to hold without being held, must be outside time's jurisdiction entirely.</p>
+<p>This resonates powerfully with contemporary philosophy of mind, with Parfit's bundle theory, with Metzinger's self-model, with Nagel's irreducibility of the first-person perspective. All of these are wrestling with the same ancient knot: can consciousness be fully explained from the outside, or does it contain an irreducible inside that escapes every third-person account? What keeps me coming back to the Advaita framing is its directness. The witness is not a metaphysical hypothesis you must accept on faith. It is, if the tradition is right, the most direct fact of your experience, the one fact that cannot be doubted, because the doubting is itself witnessed by it.</p>
+<p>I'm still not sure I believe it. But I'm not sure I don't, either. And that uncertainty feels, strangely, like progress.</p>`
+  },
+  {
+    id:3, filter:"logic",
+    date:"September 22, 2024", readTime:"8 min read", tag:"Nyāya · Logic",
+    title:"Inference and Doubt: The Nyāya Theory of Mind",
+    excerpt:"The Nyāya school offers one of the most rigorous accounts of reasoning in world philosophy. What does it say about the nature of the mind that reasons; and what does a CS student make of it?",
+    img:"images/essay-inference-and-doubt-the-nyaya.jpg",
+    content:`<p>I spend a significant portion of my professional life thinking about inference. Machine learning is, at bottom, a theory of how systems should update beliefs in light of evidence, a computational epistemology. So it was with a kind of delighted shock that I discovered the Nyāya-sūtras, composed by Akṣapāda Gautama around the second century CE, contain what is essentially the same set of problems, worked out with the same rigour, but with an entirely different set of conceptual tools and a completely different theory of what the mind doing the inferring actually is.</p>
+<div class="pq">"Doubt (saṃśaya) is not an obstacle to knowledge for the Naiyāyika, it is the very engine of philosophical inquiry. One cannot seek what one is certain one already has. The restless mind is the productive mind."</div>
+<p>The Nyāya pramāṇa framework: perception (pratyakṣa), inference (anumāna), comparison (upamāna), and testimony (śabda), is a taxonomy of valid epistemic sources that maps surprisingly well onto problems I work on daily. Supervised learning from labelled data is something like pratyakṣa at scale. Unsupervised learning resembles anumāna. Large language models trained on text are, in an interesting sense, śabda-machines: they learn from testimony, from the accumulated linguistic output of millions of humans.</p>
+<p>But where the Nyāya account becomes genuinely strange and fascinating to me as a computer scientist is in its theory of the mind (manas). For the Nyāya-Vaiśeṣika school, manas is a distinct, atomic, eternal substance that mediates between the soul (ātman) and the sense organs. Its defining characteristic is that it can only attend to one sense datum at a time. The mind shuttles between senses at imperceptible speed, creating the illusion of simultaneous perception. This is, remarkably, not entirely wrong. The psychological literature on attentional bottlenecks (that conscious awareness can fully process only one stream at a time while parallel processing happens subconsciously) supports something like this picture.</p>
+<p>The treatment of doubt in Nyāya philosophy is what I find most generatively useful. Saṃśaya is not mere uncertainty but a cognition that oscillates between two contradictory possibilities without settling. It arises when a percept shares features with two different categories: the tall shape in the fog could be a man or a stump. For Nyāya, this oscillation is philosophically productive: it motivates inquiry. You doubt, you inquire, you arrive at valid knowledge (pramā). Certainty is not the starting point. Doubt is.</p>
+<p>Thomas Kuhn's anomalies that precipitate paradigm shifts are structural cousins of the Nyāya saṃśaya. So is the practice of holding a falsifiable hypothesis loosely, ready to revise it on encountering recalcitrant data. Both traditions understand that the mind's discomfort with unresolved contradiction is not a bug but the signal that productive reasoning has begun.</p>
+<p>What strikes me most, stepping back, is that the Nyāya school treats mind as an instrument, fallible, trainable, structurally knowable, operating according to principles that can be articulated and tested. That is exactly how I think about neural networks. The difference is that the Naiyāyika insists there is something doing the reasoning that is not itself a network: the ātman, the soul, the irreducible experiencer that the inference-engine serves. That's the gap I can't close from my side of the desk. But I find it increasingly interesting that the gap is there at all.</p>`
+  },
+  {
+    id:4, filter:"mahabharata",
+    date:"December 11, 2024", readTime:"9 min read", tag:"Mahabharata · Ethics",
+    title:"Dharma at Kurukṣetra: The Ethics of Impossible Choice",
+    excerpt:"Arjuna's crisis is not a failure of courage. It is a genuine moral catastrophe. What does the Gītā actually say about acting when every option destroys something sacred?",
+    img:"images/essay-dharma-at-kuruksetra-the-ethics.jpg",
+    content:`<p>There's a genre of Bhagavad Gītā commentary that bothers me: the kind that treats Arjuna's collapse as a problem to be solved, a moment of weakness to be corrected and overcome. On this reading, Kṛṣṇa's teaching is a therapeutic intervention, Arjuna has a breakdown, Kṛṣṇa talks him back to functional competence, the army marches, everybody fights. The Gītā as motivational literature. I think this is, with respect, completely wrong about what is happening in the first chapter.</p>
+<div class="pq">"Arjuna's problem is not cowardice. He sees too clearly. He understands, with appalling precision, what it will cost to win, and he is not yet sure the victory is worth the price that will be paid."</div>
+<p>Arjuna, standing between the two armies, sees with extraordinary moral clarity the faces of those he must kill: his teachers, his grandfather Bhīṣma, his cousins, his friends. His bow slips from his fingers. And what he says to Kṛṣṇa in that first chapter is not the babbling of a coward. It is a sustained philosophical argument: one of the most compressed and powerful in all of Indian literature, for why this particular war, at this particular moment, should not be fought. The destruction of families, the disruption of caste duties, the moral contamination of the survivors: Arjuna lays all of this out with the precision of someone who has genuinely thought about it.</p>
+<p>What he is facing is what moral philosophers call a tragic dilemma a situation in which every available option violates some genuine moral obligation. Fight: kill his teachers and kin, destroy the bonds of family and gratitude that make human life coherent. Refuse: abandon his duty as a kṣatriya, betray his brothers, allow an unjust regime to continue. There is no clean path. The field of Kurukṣetra is, in this sense, not an extreme case but an archetype of the moral texture of adult life.</p>
+<p>Kṛṣṇa's response is multi-layered, and I think all the layers matter. The metaphysical argument (the ātman is eternal and cannot be killed) is not a dodge but a genuine recontextualization. If you locate the reality of persons in the ātman rather than in the body-mind complex, then the category of "harm" shifts. This doesn't resolve the dilemma but changes its parameters.</p>
+<p>The doctrine of niṣkāma karma, action without attachment to fruits, is equally important. The problem is not action itself but the ego-tethering of action: the assumption that "I am the doer" and "I will bear the consequences." When that assumption is loosened, action becomes possible without the paralysis of anticipated guilt. This is psychologically acute in a way that has nothing to do with mysticism.</p>
+<p>But I keep returning to the argument from svadharma, one's own dharma. Every person exists within a web of relationships and social positions that generate genuine obligations. To abandon those obligations at the moment they cost most is not liberation, it is dissolution without insight. Śaṅkara himself, commenting on the Gītā, is clear that renunciation which is merely strategic, motivated by fear of pain rather than genuine discrimination, is not mukti. Arjuna's refusal to fight, at this point in his development, would have been exactly that kind of strategic cowardice dressed up as high principle.</p>
+<p>The Gītā is not offering a solution to the tragic dilemma. It is offering a reframing of what it means to act rightly in a broken world. The just person doesn't wait for conditions in which all obligations can be met simultaneously; those conditions are rare to non-existent. The just person cultivates the inner freedom to act from clarity rather than panic, from duty rather than desire, and with the full knowledge that even the best action may leave a permanent scar. That is not triumphalism. It is, I think, the most honest thing the text is saying.</p>`
+  },
+  {
+    id:5, filter:"cogscience",
+    date:"February 7, 2025", readTime:"9 min read", tag:"Buddhist · Consciousness",
+    title:"No-Self and the Stream: Nāgārjuna's Radical Middle",
+    excerpt:"If there is no permanent self, who experiences? Nāgārjuna's Madhyamaka destabilizes both the materialist and the eternalist answers, and I find it genuinely troubling in the best way.",
+    img:"images/essay-noself-and-the-stream-nagarjunas.jpg",
+    content:`<p>I want to be honest: I find Nāgārjuna's philosophy genuinely unsettling in a way that I cannot fully resolve. I've read it, re-read it, argued with it in my head, tried to find the loophole, and every time, I come out the other side not sure which way is up. Which is, I gather, the intended effect. It is a philosophy specifically designed to leave you with nowhere comfortable to stand. Whether that is profound or annoying depends entirely on the day.</p>
+<div class="pq">"Emptiness, Nāgārjuna insists, is not a new metaphysical ground. The emptiness of all things is itself empty. There is no safe shore. There is not even a safe concept of shore-lessness."</div>
+<p>The technical core is the doctrine of pratītyasamutpāda, dependent origination. All things arise in dependence on other things, which means nothing has svabhāva: its own inherent, independent existence. When you try to locate the ultimate, self-sufficient ground of any entity, a chair, a thought, a moment of consciousness, an "I" you find only more dependences, more relations, relations all the way down. The search for substance ends in a hall of mirrors with no original image behind any of them.</p>
+<p>Applied to consciousness, this is explosive. The ordinary assumption is that consciousness is the one thing that surely has inherent existence. The medium in which everything else appears, the last bedrock when everything else is doubted. Even Descartes found this bedrock in the cogito. Nāgārjuna refuses the move. The awareness of thinking is itself dependently arisen: it requires an object, a sense faculty, prior conditions, a causal history. Strip those away and there is nothing that you could call pure awareness having inherent independent existence.</p>
+<p>The Advaita Vedāntin (my other philosophical home) will object: the sākṣin is not an entity among entities, so the critique of svabhāva doesn't apply. Nāgārjuna's ready reply is that any notion of consciousness must be conceptually characterized to be communicated at all, and anything so characterized is already within the web of designation (prajñapti). There is no view from nowhere, not even the Advaita view that claims to stand everywhere simultaneously. You cannot use language to point beyond language without using language.</p>
+<p>What emerges is the two-truths framework: conventional truth (saṃvṛti-satya) and ultimate truth (paramārtha-satya) holding simultaneously without cancelling each other. At the conventional level: persons exist, suffering is real, the path has stages, liberation is achievable. At the ultimate level: none of these has inherent existence. Both are true; neither negates the other. This is either the most sophisticated philosophical position in human history or an elaborate way to have it both ways. I haven't decided which.</p>
+<p>For consciousness studies, which is increasingly where my own research interests live, the two-truths framework offers something genuinely useful. At the conventional level, we can investigate consciousness empirically: trace neural correlates, map developmental stages, study pathologies and peaks. At the ultimate level, the question "what is consciousness, fundamentally?" may be a category error, assuming that the questioner and the phenomenon have the fixed, isolable existence that makes the question answerable. Maybe the hard problem of consciousness is hard not because consciousness is mysterious but because we've been asking a malformed question.</p>
+<p>Nāgārjuna's fourfold negation (catuṣkoṭi); "not X, not not-X, not both, not neither", is not evasion. It is the most honest thing language can do when pointing at something that exceeds its own resources. Twenty-two centuries later, we're still pointing at the same thing with better instruments and arriving at the same impasse. I find that either deeply humbling or darkly funny. On good days, both.</p>`
+  },
+  {
+    id:6, filter:"mahabharata",
+    date:"May 19, 2025", readTime:"8 min read", tag:"Mahabharata · Philosophy",
+    title:"Yakṣa's Questions: Logic at the Forest's Edge",
+    excerpt:"The Yakṣa Praśna in the Vana Parva is the Mahabharata's most concentrated philosophical dialogue. It is also, I think, the most beautiful examination of what wisdom actually looks like under pressure.",
+    img:"images/essay-yaksas-questions-logic-at-the.jpg",
+    content:`<p>If I had to choose one episode from the entire Mahabharata to explain why I find the text so inexhaustible, I would choose the Yakṣa Praśna without hesitation. It is not the most dramatic episode, the dice game is that, the Kurukṣetra war is that. But the Yakṣa dialogue, tucked into the Vana Parva during the long years of exile, is where the epic shows you what all that drama is actually for. It is a philosophical stress test. And the result is, I think, one of the most remarkable things ever written.</p>
+<div class="pq">"'What is the most wonderful thing in the world?' The Yakṣa asks. And Yudhiṣṭhira answers: 'Day after day, creatures go to the realm of death. Yet those who remain live as if they were immortal. What could possibly be more wonderful than that?'"</div>
+<p>The setup is extreme: four of the five Pāṇḍava brothers lie senseless at the edge of a forest lake, struck down by a disembodied voice for drinking without answering its questions. Only Yudhiṣṭhira, the eldest, will listen. He approaches the lake knowing his brothers may already be dead. He approaches anyway. And the dialogue that follows, between Yudhiṣṭhira and the Yakṣa, who is revealed at the end to be Dharma personified, his divine father, is a hundred or so exchanges that function simultaneously as riddles, philosophical propositions, and a portrait of what it means to hold your values when holding them costs everything.</p>
+<p>The questions span the entire range of philosophical concern. "What is heavier than earth?", A mother. "What is higher than the sky?" A father. "What is faster than the wind?" The mind (manas). Each answer encodes a position: the moral weight of obligation exceeds the physical weight of matter; the mind's velocity is not spatial but intentional — it is already at its destination before the body has moved. These are not folk wisdom platitudes. They are philosophical claims, and they are making an argument about the primacy of the ethical and the mental over the material.</p>
+<p>The exchange on knowledge is where I always have to pause. "What is true learning?", Knowledge of the Self (ātman-jñāna). "What is ignorance?": The absence of that knowledge. And then, remarkably: "What constitutes wealth?", The qualities of the good person. Not gold, not land, not status. Virtue is wealth. This is the Mahabharata inverting the values of the warrior aristocracy from within, using the genre of the hero tale to smuggle in a completely different value system.</p>
+<p>But the ending is what stays with me longest. Yudhiṣṭhira is told he can restore one fallen brother to life. The reasonable, strategic choice is obvious: restore Arjuna, the greatest warrior, without whom the war cannot be won. Or Bhīma, the most powerful, the second pillar of the army. But Yudhiṣṭhira chooses Nakula, his half-brother from his father's second wife; on the grounds that it would be inequitable for only one of his mother's sons to live while none of his other mother's sons did. The Yakṣa is overwhelmed. This is dharma holding its shape under the most extreme possible pressure, refusing to let the calculation of advantage displace the principle of equity.</p>
+<p>I think about this choice regularly. Not because I face anything remotely comparable, I'm a grad student, my biggest dilemmas are about choosing between deadlines, but because the structure of the choice is everywhere. The Mahabharata's argument is that wisdom is not the accumulation of correct information. It is the ability to remain lucid at the edge of crisis. To answer truly when answering truly costs something. That remains, in any century, the hardest and most necessary form of intelligence.</p>`
+  },
+  {
+    id:7, filter:"cogscience",
+    date:"August 5, 2025", readTime:"8 min read", tag:"Kashmir Śaivism",
+    title:"The Vibrating Heart: Consciousness as Spanda",
+    excerpt:"Kashmir Śaivism's doctrine of spanda, the primordial throb of consciousness, is one of the most dynamic and counterintuitive theories of mind in world philosophy. I've become a little obsessed with it.",
+    img:"images/essay-the-vibrating-heart-consciousness-as.jpg",
+    content:`<p>I discovered the concept of spanda during a particularly bad week of failed experiments and rejected paper drafts, which is, in retrospect, probably the ideal time to encounter a philosophy that insists the dynamic, oscillating, unresolvable quality of experience is not a problem to be fixed but the fundamental nature of reality. It felt less like a philosophical idea and more like a permission slip.</p>
+<div class="pq">"The Spandakārikās declare: 'That principle of Śiva from which this universe emerges, in which it abides, and into which it withdraws, that very throb of consciousness is the life of all living beings.' This is either profound or extremely intense. Probably both."</div>
+<p>Spanda: often translated as vibration or throb, is the central concept of a ninth-century Kashmirian philosophical tradition associated with Vasugupta, author (or discoverer, depending on which legend you prefer) of the Śivasūtras and the Spandakārikās. The Pratyabhijñā (Recognition) school built on this foundation represents, I think, one of the most sophisticated and underappreciated philosophical systems in world history. It is also one of the very few that takes the dynamic, processual, oscillating character of experience as its starting point rather than something to be explained away.</p>
+<p>Where Advaita Vedānta tends toward the language of stillness (Brahman as nirguṇa, without qualities, beyond motion), Kashmir Śaivism insists that consciousness is intrinsically dynamic. It is not static being but being in constant creative act. The universe is not created by consciousness and then left to run; it is perpetually enacted, moment by moment, in the creative pulsation of divine self-awareness knowing itself through its own manifestation. This is a view of reality as performance rather than substance, as verb rather than noun.</p>
+<p>The practical implication, which Abhinavagupta develops with extraordinary sophistication in the Tantrāloka, is liberating: the ceaseless mental activity that Advaita calls māyā and urges you to see through is not, for the Śaiva tradition, an obstacle to liberation. It is the divine spanda itself, playing in the field of its own awareness. Liberation (mukti) is not the cessation of this dynamic but the recognition of its nature: the sudden seeing that all the turbulence is the movement of consciousness itself, and that you are that consciousness, not the one being tossed around by it.</p>
+<p>Abhinavagupta's extension of the spanda doctrine into aesthetics is where I find myself most captivated. For him, the experience of rasa, the aesthetic emotion evoked by great art, is a direct taste of spanda. When we weep at a tragedy or are transported by music, the usual boundaries of the self momentarily dissolve. The sense of being a separate, located subject with a history and a future temporarily lifts. And what we touch in that moment; camatkāra, the shock of wonder, is structurally identical to what the mystic experiences in recognition (pratyabhijñā) of the self's divine nature. Art and enlightenment are the same moment, differing only in duration and context.</p>
+<p>As someone working in computer science with a growing interest in how computational processes might relate to conscious experience, I find the spanda doctrine offers a genuinely interesting alternative framework. The brain-as-prediction-machine account, the view, associated with Friston's free energy principle and related approaches, that the brain is constantly generating and revising predictions rather than passively receiving inputs, has a structural resonance with the Kashmirian view that consciousness is not a mirror of the world but the living act from which the appearance of a world continuously wells up. Both views are actively constructivist rather than passively receptive. Both take the dynamic, processual character of experience as fundamental rather than derivative.</p>
+<p>I don't think this makes them the same theory. But the resonance is worth thinking about. To practice with spanda is not to seek a quieted mind but an awake one; awake to its own pulsation in the midst of all its fluctuations. The vibrating heart is not a problem to be solved. It is the reality to be recognized.</p>`
+  },
+  {
+    id:8, filter:"bookreview",
+    date:"October 12, 2025", readTime:"10 min read", tag:"Book Review · Cognitive Science",
+    title:"Review: 'Being No One' by Thomas Metzinger, A Neurophilosopher Walks Into a Vedānta Debate",
+    excerpt:"Metzinger's self-model theory of subjectivity is one of the most rigorous accounts of consciousness in contemporary philosophy of mind. It is also, I keep thinking, a very long and very German way of arriving somewhere Śaṅkara had already mapped.",
+    img:"images/essay-review-being-no-one-by.jpg",
+    content:`<p>I came to Thomas Metzinger's Being No One (2003) after spending months in Advaita Vedānta, a sequencing that I cannot recommend highly enough, because it makes the book feel like a very elaborate rediscovery. Metzinger is a German philosopher of mind at Mainz, a rigorous analytical thinker who has spent his career trying to give a naturalistically respectable account of subjective experience, of what it means for there to be something it is like to be a particular person at a particular moment. His answer, the self-model theory of subjectivity (SMT), is dazzling and thorough and genuinely illuminating. It is also, at its core, a version of something the Advaita tradition has been saying for about fifteen centuries, translated into the vocabulary of cognitive science and phenomenology.</p>
+<div class="pq">"Metzinger's core claim: no such thing as a self exists. What we call the self is a real-time simulation, a transparent self-model that the brain generates to organize its own processing. Nobody is ever born. Nobody ever dies. Only the phenomenal self-model arises, persists, and dissolves."</div>
+<p>The SMT holds that conscious experience is the result of the brain generating a world-model in real time a dynamic, integrated simulation of both the external environment and the organism's own internal states. The "self" is a specific part of this model: the phenomenal self-model (PSM), which represents the system to itself as a subject of experience. Crucially, this model is transparent. We don't experience it as a model. We experience it as immediate reality. The self feels like a fact about the world, not a construction of the brain. This transparency is the root of what Metzinger calls the "ego tunnel" — we live inside the model, looking out, without access to its model-character.</p>
+<p>Readers of Advaita Vedānta will recognize the deep structure of this argument immediately. The PSM and its transparency map onto avidyā, the beginningless ignorance by which Brahman mistakes itself for the jīva, the individual self. The ego tunnel is māyā: not illusion in the sense of hallucination, but in the sense of a real appearance whose ultimate nature is misapprehended. And Metzinger's claim that "nobody is ever born and nobody ever dies", that personal identity is not a metaphysical fact but a functional fiction, is, in different words, the Advaita claim that the ātman is eternal precisely because it was never actually individuated in the first place.</p>
+<p>What Metzinger adds that Advaita does not have is a mechanistic account of how the self-model is generated and maintained. The PSM is generated by specific neural processes; it can be disrupted by specific interventions (anesthesia, meditation, certain dissociative disorders, out-of-body experiences). This gives the theory empirical teeth that the Advaita account lacks; you can, in principle, test its predictions in ways you cannot straightforwardly test the claim that ātman is Brahman.</p>
+<p>But there is something Advaita has that Metzinger struggles with: an account of the witness. The sākṣin, the pure awareness that is aware of the self-model without being itself modelled, has no clear place in Metzinger's framework. He is committed to naturalism, which means he cannot posit an irreducible subject of experience outside the causal-functional nexus. But this means his account has a peculiar loop in it: the brain generates a self-model, and… who is aware of the self-model? He says it's the model itself, recursively. But this is either question-begging or it is, again, something very close to what Advaita says about consciousness being self-luminous. Which he presumably doesn't want to say, for reasons of naturalistic scruple.</p>
+<p>Being No One is a genuinely great book, even at its intimidating 700-page length. I recommend it to anyone interested in consciousness, identity, and the nature of the self; and I recommend reading it alongside something from the Advaita tradition, not because one tradition is right and the other wrong, but because the conversation between them is more interesting than either alone. Metzinger's naturalism and Śaṅkara's non-dualism are mapping the same territory with different instruments, and the discrepancies in their maps are exactly where the most interesting questions live.</p>`
+  },
+  {
+    id:9, filter:"bookreview",
+    date:"November 28, 2025", readTime:"10 min read", tag:"Book Review · Philosophy of Mind",
+    title:"Review: 'The Experience Machine' by Andy Clark, Predictive Processing and the World Inside Your Head",
+    excerpt:"Andy Clark's account of the predictive brain is one of the most exciting frameworks in contemporary cognitive science. It also raises questions about consciousness and construction that no amount of neuroscience, by itself, can answer.",
+    img:"images/essay-review-the-experience-machine-by.jpg",
+    content:`<p>Andy Clark has spent most of his career arguing that the mind is not a passive recipient of sensory data but an active prediction machine, a hypothesis-generating engine that constantly constructs models of the world and updates them against incoming signals. The Experience Machine (2023) is his most accessible statement of this view, aimed at a general audience, and it is excellent: clear, generous, full of good examples, and genuinely mind-altering in the literal sense that reading it changes how you experience your own experience. Halfway through Chapter 3 I had to put the book down and stare at my wall for a while, which is my benchmark for a serious book.</p>
+<div class="pq">"If the brain is a prediction machine, then what we call 'perception' is actually controlled hallucination, the best guess of a system that never has direct access to the world, only to its own imperfect signals. Your experience of this room, right now, is a hypothesis."</div>
+<p>The predictive processing (PP) framework, associated with Karl Friston's free energy principle and developed in cognitive science by Clark, Jakob Hohwy, and others, holds that the brain maintains a hierarchical generative model of the environment and uses incoming sensory data primarily to correct prediction errors: discrepancies between what the model expected and what the sensors report. Perception, on this view, is top-down as much as bottom-up: what you see is determined at least as much by what your brain predicts it will see as by what is actually there. This is not a marginal claim. It means that perceptual experience is, at bottom, a controlled hallucination that happens to be calibrated against external signals.</p>
+<p>What Clark does particularly well in The Experience Machine is show how this framework explains an enormous range of phenomena that traditional input-output models of cognition struggle with: why placebos work at a neurological level, why chronic pain can persist after the tissue damage that caused it has healed, why sensory deprivation generates hallucinations, why attention dramatically changes what we perceive. In each case, the PP account is both mechanistically plausible and phenomenologically accurate in a way that feels revelatory.</p>
+<p>As someone with one foot in Indian philosophy, I found the parallels to Kashmir Śaivism's spanda doctrine striking and not superficial. For the Pratyabhijñā school, consciousness is not a mirror of the world but the living creative act from which the appearance of a world continuously arises, a constructive, dynamic process of self-knowing that generates its own objects. This is not identical to Clark's framework, but the underlying metaphysics of mind-as-constructor rather than mind-as-receiver overlaps in ways that deserve more philosophical attention than they typically receive.</p>
+<p>My serious concern with The Experience Machine and with PP accounts generally is the consciousness question, which Clark largely sidesteps. The PP framework is, at its core, a theory of information processing: it explains how the brain computes its best model of the environment and updates that model in response to error signals. What it does not explain (and what Clark acknowledges but does not, I think, adequately address) is why any of this processing is accompanied by phenomenal experience at all. Why is there something it is like to be a prediction machine? Why is the prediction not just computed in the dark?</p>
+<p>This is Chalmers' hard problem, and Clark's treatment of it in the book is disappointingly brief. He gestures toward the idea that predictive processing might dissolve the hard problem by changing the question, but doesn't show how. The gap between the computational and the phenomenal remains. For what it's worth, I think the Indian philosophical traditions, particularly Advaita and Kashmir Śaivism, have thought harder about this gap than most Western analytic philosophy has. The Experience Machine is an impressive and illuminating book about what minds do. It tells us much less about what minds are.</p>`
+  },
+  {
+    id:10, filter:"bookreview",
+    date:"January 15, 2026", readTime:"11 min read", tag:"Book Review · AI & Mind",
+    title:"Review: 'Possible Minds' ed. Brockman, Twenty-Five Ways to Worry About Artificial Intelligence",
+    excerpt:"An anthology of essays on AI and mind by scientists and philosophers, including Dennett, Tegmark, and Alison Gopnik. Smart, uneven, and strangely illuminating about the questions we haven't figured out how to ask yet.",
+    img:"images/essay-review-possible-minds-ed-brockman.jpg",
+    content:`<p>I picked up Possible Minds (2019) because John Brockman's Edge anthologies tend to concentrate serious people thinking seriously about hard problems, and the question of what artificial intelligence means for our understanding of mind seemed like exactly the kind of question where that format would generate heat. I was not disappointed. The collection has twenty-five essays by scientists, philosophers, and researchers, including Daniel Dennett, Max Tegmark, Alison Gopnik, Stuart Russell, and Rodney Brooks, among others, responding to Norbert Wiener's still-prescient 1950 book The Human Use of Human Beings. It is smart, frequently brilliant, occasionally infuriating, and as a whole it maps the current state of intelligent confusion about intelligence better than almost anything else I've read.</p>
+<div class="pq">"The deepest question the anthology keeps circling without quite landing on: whether artificial systems, however sophisticated, are computing in the dark: processing information without any accompanying experience, or whether, at some threshold of complexity, the lights come on. Nobody knows. The honesty of that not-knowing is, in its way, the most interesting thing in the book."</div>
+<p>The strongest essays are those that resist the twin temptations of AI triumphalism and AI doom-mongering and instead focus on the hard philosophical questions that our current enthusiasm tends to obscure. Alison Gopnik's contribution is exemplary: she argues that the kinds of learning current AI systems excel at (pattern recognition from massive labelled datasets) are actually the least interesting and least characteristic kinds of human learning. What children do, she argues, is something far more creative: they generate causal models of the world from minimal data, revise them in the light of experience, and use them to reason counterfactually. Current LLMs cannot do this in any robust sense. They are brilliant interpolators and terrible extrapolators.</p>
+<p>Dennett's essay is, predictably, the most provocative. He argues that consciousness is itself a kind of user illusion — a simplified model that the brain generates for itself, and that the question of whether AI systems are conscious is therefore the wrong question. The right question is whether they have the functional properties that make the illusion adaptive. This is, if you accept his view of consciousness, a perfectly respectable research program. If you don't accept his view: and I am sympathetic with those who think eliminating phenomenal experience from the theory is precisely eliminating what needs to be explained, then his optimism about AI consciousness is built on sand.</p>
+<p>As a CS student, what I find most practically interesting in the collection is the cluster of essays around questions of alignment and interpretability, the problem of building AI systems whose goals we understand and can correct. Stuart Russell's contribution argues that the canonical model of AI as an optimizer of a fixed objective function is almost guaranteed to produce systems misaligned with human values, because human values are contextual, inconsistent, and never fully articulable. His proposed solution, systems that are uncertain about their objectives and seek to learn them from human behavior, is technically interesting, though it raises its own philosophical problems about the nature of value and the possibility of preference revelation.</p>
+<p>From the perspective of Indian philosophy, what strikes me about the entire collection is how thoroughly it is embedded in a particular (and, I think, philosophically impoverished) view of consciousness as an emergent property of information processing complexity. The hard problem barely appears. The question of whether consciousness has intrinsic properties that are not reducible to functional relations; properties that the entire Vedāntic and Buddhist philosophical tradition has been analyzing with extraordinary rigor for two millennia, is not seriously engaged. The anthology is brilliant about the engineering challenges of intelligence. It is much less penetrating about the philosophical challenges of mind. Those challenges, I keep thinking, are not going to be solved by better benchmarks and bigger parameter counts. They require the kind of first-person investigation that the traditions I care most about have been doing all along.</p>
+<p>Possible Minds is worth reading, particularly if you're already in the AI world and want to understand the deeper stakes. Read it alongside Metzinger, alongside the Upaniṣads, alongside something by Nāgārjuna, and you will understand not just what the questions are but why they are, genuinely, among the hardest questions the human mind has ever tried to ask about itself.</p>`
+  }
+];
+
+// --- RENDER ---
+const grid = document.getElementById('blogGrid');
+const featuredWrap = document.getElementById('featuredWrap');
+
+function parseDate(str) {
+  return new Date(str);
+}
+
+function renderAll(filter) {
+  grid.innerHTML = '';
+  featuredWrap.innerHTML = '';
+  // Sort newest first
+  const sorted = [...posts].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+  const filtered = sorted.filter(p => filter === 'all' || p.filter === filter);
+  filtered.forEach((p, idx) => {
+    if (idx === 0 && filter === 'all') {
+      renderFeatured(p);
+    } else {
+      renderCard(p);
+    }
+  });
+}
+
+function renderFeatured(p) {
+  const div = document.createElement('div');
+  div.className = 'featured';
+  div.innerHTML = `
+    <div class="fi"><img src="${p.img}" alt="${p.title}" loading="eager"/></div>
+    <div class="fb-body">
+      <span class="featured-badge">&#9733; Featured Essay</span>
+      <div class="fb-tag">${p.tag}</div>
+      <div class="fb-title">${p.title}</div>
+      <div class="fb-date">${p.date} &nbsp;&#183;&nbsp; ${p.readTime}</div>
+      <p class="fb-excerpt">${p.excerpt}</p>
+      <button class="read-btn">Read full essay &#8594;</button>
+    </div>`;
+  div.addEventListener('click', () => openModal(p));
+  featuredWrap.appendChild(div);
+}
+
+function renderCard(p) {
+  const c = document.createElement('div');
+  c.className = 'bc';
+  c.innerHTML = `
+    <div class="ci">
+      <img src="${p.img}" alt="${p.title}" loading="lazy"/>
+      <span class="cat-tag">${p.tag}</span>
+      <span class="read-time">${p.readTime}</span>
+    </div>
+    <div class="cb">
+      <div class="cd">${p.date}</div>
+      <div class="ct">${p.title}</div>
+      <p class="cx">${p.excerpt}</p>
+      <button class="cr-btn">Read &#8594;</button>
+    </div>`;
+  c.addEventListener('click', () => openModal(p));
+  grid.appendChild(c);
+}
+
+// Filter tabs
+document.querySelectorAll('.ftab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAll(btn.dataset.filter);
+  });
+});
+
+// Modal
+const overlay = document.getElementById('mo');
+const mc = document.getElementById('mc');
+
+function openModal(p) {
+  document.getElementById('mImg').src = p.img;
+  document.getElementById('mImg').alt = p.title;
+  document.getElementById('mTag').textContent = p.tag;
+  document.getElementById('mTitle').textContent = p.title;
+  document.getElementById('mMeta').innerHTML = `<span>&#128197; ${p.date}</span><span>&#9201; ${p.readTime}</span>`;
+  document.getElementById('mContent').innerHTML = p.content;
+  lastFocus = document.activeElement;
+  overlay.hidden = false;
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  mc.focus({ preventScroll: true });
+}
+
+let lastFocus = null;
+function closeModal() {
+  if (!overlay.classList.contains('open')) return;
+  overlay.classList.remove('open');
+  overlay.hidden = true;
+  document.body.style.overflow = '';
+  if (lastFocus) lastFocus.focus({ preventScroll: true });
+}
+
+mc.addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+renderAll('all');
+
+// Site switch: slide the knob, then go.
+(() => {
+  const sw = document.querySelector('.site-switch');
+  if (!sw) return;
+  const other = sw.querySelector('.switch-side:not([aria-current])');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  other.addEventListener('pointerenter', () => sw.classList.add('hint-other'));
+  other.addEventListener('pointerleave', () => sw.classList.remove('hint-other'));
+  sw.querySelectorAll('a:not([aria-current])').forEach(a => a.addEventListener('click', e => {
+    if (reduce || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    sw.classList.add('is-switching');
+    setTimeout(() => { location.href = a.href; }, 230);
+  }));
+  addEventListener('pageshow', () => sw.classList.remove('is-switching', 'hint-other'));
+})();
+</script>
+</body>
+</html>

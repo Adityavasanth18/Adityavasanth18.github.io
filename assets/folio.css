@@ -517,3 +517,70 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   .atlas-sector-arc, .atlas-sector-label, .atlas-center { animation: none; }
   .atlas-sector-arc, .atlas-sector-label, .atlas-open, .atlas-center .atlas-project { transition: none; }
 }
+
+/* ───────── Experience detail: the work beneath the numbers ─────────
+   iRAL is a sequence, so it is drawn as the path a submission takes.
+   Pink Moon was three products in parallel, so they sit side by side. */
+.ledger-results-three { grid-template-columns: 1.3fr 1fr 1fr; }
+.ledger-detail { margin-top: 42px; padding-top: 26px; border-top: 1px solid #c7b496; }
+.ledger-sub { font: 11px/1.8 var(--mono); color: var(--terra); margin-bottom: 26px; }
+.ledger-detail h5 { font: 400 21px/1.2 var(--serif); letter-spacing: -.02em; color: var(--ink); margin: 0 0 10px; }
+.ledger-detail p:not(.ledger-sub) { font-size: 13px; line-height: 1.75; color: var(--muted); max-width: 38ch; }
+.ledger-stack { display: block; margin-top: 14px; font: 10px/1.8 var(--mono); color: #7a5a3e; }
+
+.submission-path { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 26px; counter-reset: stage; position: relative; padding: 0; }
+.submission-path::before { content: ''; position: absolute; left: 5px; right: 0; top: 5px; height: 1px; background: linear-gradient(to right, #a58a69 0 92%, transparent); }
+.submission-path li { position: relative; padding-top: 24px; counter-increment: stage; }
+.submission-path h5::before { content: counter(stage, decimal-leading-zero); display: block; font: 10px var(--mono); color: #9a7b59; letter-spacing: .04em; margin-bottom: 9px; }
+.path-node { position: absolute; top: 0; left: 0; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--terra); background: #e2d2b6; }
+.submission-path li:last-child .path-node { background: var(--terra); }
+
+.product-plates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.product-plate { padding: 4px 26px 6px; border-left: 1px solid #c7b496; }
+.product-plate:first-child { padding-left: 0; border-left: 0; }
+.product-glyph { width: 40px; height: 40px; color: var(--terra); display: block; margin-bottom: 18px; }
+.plate-domain { display: block; font: 10px/1.6 var(--mono); color: #9a7b59; margin-bottom: 7px; }
+
+@media (max-width: 1100px) {
+  .submission-path { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 26px; }
+  .submission-path::before { display: none; }
+  .ledger-results-three { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 800px) {
+  .product-plates { grid-template-columns: 1fr; }
+  .product-plate, .product-plate:first-child { padding: 24px 0 0; border-left: 0; border-top: 1px solid #c7b496; margin-top: 24px; }
+  .product-plate:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+  .ledger-detail p:not(.ledger-sub) { max-width: 60ch; }
+}
+@media (max-width: 600px) {
+  .ledger-detail { margin-top: 32px; }
+  .submission-path { grid-template-columns: 1fr; gap: 26px; padding-left: 26px; }
+  .submission-path::before { display: block; left: 5px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; background: #a58a69; }
+  .submission-path li { padding-top: 0; }
+  .path-node { left: -26px; top: 3px; }
+  .ledger-results-three { gap: 15px; }
+}
+
+/* ───────── Site switch: the same person, two desks ─────────
+   Work is the bronze instrument; Essays is the reading room. The knob is
+   one of the dial's points, moved into the header. */
+.site-switch { display: flex; align-items: center; gap: 9px; margin-left: auto; margin-right: 34px; }
+.switch-side { font: 11px var(--mono); letter-spacing: .04em; color: #a8977c; min-height: 36px; display: inline-flex; align-items: center; transition: color .2s ease; }
+.switch-side[aria-current="page"] { color: #f0ddba; }
+.switch-side:hover { color: #fff1d6; }
+.switch-track { position: relative; display: block; width: 34px; height: 16px; border: 1px solid #7a6243; border-radius: 999px; }
+.switch-knob { position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--patina-agents, #e0b87e); box-shadow: 0 0 0 3px #e0b87e22; transition: transform .22s cubic-bezier(.3,.7,.3,1); }
+.site-switch.hint-other .switch-knob { transform: translateX(4px); }
+.site-switch.is-switching .switch-knob { transform: translateX(18px); }
+.switch-side:focus-visible { outline: 1px solid #f0ddba; outline-offset: 3px; }
+.about-essays a { color: var(--terra); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.about-essays a:hover { color: var(--ink); }
+@media (max-width: 1100px) { .site-switch { margin-right: 22px; } }
+@media (max-width: 800px) { .site-switch { margin-right: 18px; gap: 7px; } .switch-side { font-size: 10px; } }
+@media (max-width: 380px) { .site-switch { gap: 5px; margin-right: 12px; } .switch-track { width: 28px; } .site-switch.is-switching .switch-knob { transform: translateX(12px); } }
+@media (prefers-reduced-motion: reduce) { .switch-knob { transition: none; } }
+@media (max-width: 380px) {
+  .menu-toggle { font-size: 0; gap: 0; }
+  .menu-toggle span { font-size: 22px; }
+  .brand-name { font-size: 26px; }
+}

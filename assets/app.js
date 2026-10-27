@@ -498,3 +498,22 @@ window.EXPLORER_STATES = {
     });
   }
 })();
+
+// Site switch: slide the knob toward Essays, then go.
+(() => {
+  const sw = document.querySelector(".site-switch");
+  if (!sw) return;
+  const other = sw.querySelector(".switch-side:not([aria-current])");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  other.addEventListener("pointerenter", () => sw.classList.add("hint-other"));
+  other.addEventListener("pointerleave", () => sw.classList.remove("hint-other"));
+  sw.querySelectorAll("a:not([aria-current])").forEach((a) =>
+    a.addEventListener("click", (event) => {
+      if (reduce || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+      event.preventDefault();
+      sw.classList.add("is-switching");
+      setTimeout(() => { window.location.href = a.href; }, 230);
+    }),
+  );
+  window.addEventListener("pageshow", () => sw.classList.remove("is-switching", "hint-other"));
+})();
