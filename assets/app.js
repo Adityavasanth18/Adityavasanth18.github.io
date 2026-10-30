@@ -517,3 +517,40 @@ window.EXPLORER_STATES = {
   );
   window.addEventListener("pageshow", () => sw.classList.remove("is-switching", "hint-other"));
 })();
+
+// Under the dial: the one-line summary of whichever point is shown, taken
+// from the project list so there is a single source of truth.
+(() => {
+  const atlas = document.querySelector(".project-atlas");
+  const note = document.querySelector(".atlas-instruction");
+  const title = atlas?.querySelector(".atlas-project");
+  const center = atlas?.querySelector(".atlas-center");
+  if (!note || !title || !center) return;
+  const nodes = [...atlas.querySelectorAll("[data-project-select]")];
+  const summary = document.createElement("p");
+  summary.className = "atlas-summary";
+  note.before(summary);
+  const update = () => {
+    const node = nodes.find((n) => n.dataset.name === title.textContent);
+    const row = node && document.getElementById(`project-${node.dataset.projectSelect}`);
+    const line = row && row.querySelector(".collection-summary");
+    summary.textContent = line ? line.textContent : "";
+    summary.classList.toggle("is-preview", center.classList.contains("is-preview"));
+  };
+  update();
+  new MutationObserver(update).observe(title, { childList: true, characterData: true, subtree: true });
+})();
+
+// Printing opens the research details so nothing is lost on paper.
+window.addEventListener("beforeprint", () =>
+  document.querySelectorAll(".research-method:not([open])").forEach((d) => {
+    d.open = true;
+    d.dataset.printOpened = "";
+  }),
+);
+window.addEventListener("afterprint", () =>
+  document.querySelectorAll(".research-method[data-print-opened]").forEach((d) => {
+    d.open = false;
+    delete d.dataset.printOpened;
+  }),
+);
