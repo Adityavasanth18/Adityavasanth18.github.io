@@ -110,3 +110,99 @@ section[id], [id^="project-"] { scroll-margin-top: 88px; }
     }
   }
 }
+
+/* ==========================================================================
+   Talvexis spotlight — a cool parchment plate after the three case studies,
+   so the run of dark plates (oxblood, olive) breaks before the collection.
+   ========================================================================== */
+.folio-spotlight { background: #e6e0d3; color: var(--ink); position: relative; }
+.folio-spotlight::before { content: ''; position: absolute; inset: 12px 0; border-block: 1px solid #2f415226; pointer-events: none; }
+.spotlight-inner { display: grid; grid-template-columns: .95fr 1.05fr; align-items: center; gap: 8%; padding-block: 96px 100px; }
+.spotlight-flag { display: flex; width: fit-content; align-items: center; gap: 10px; font: 500 12px/1 Manrope, sans-serif; letter-spacing: .02em; color: #2f4152; margin-bottom: 30px; }
+.spotlight-dot { width: 8px; height: 8px; border-radius: 50%; background: #b07a3e; box-shadow: 0 0 0 0 #b07a3e66; animation: spot-pulse 2.4s ease-out infinite; }
+@keyframes spot-pulse { 0% { box-shadow: 0 0 0 0 #b07a3e66; } 70%, 100% { box-shadow: 0 0 0 9px #b07a3e00; } }
+.folio-spotlight .eyebrow { color: #4c5a64; }
+.folio-spotlight h3 { font-size: clamp(50px, 5.6vw, 80px); line-height: .98; letter-spacing: -.05em; margin: 16px 0 26px; }
+.folio-spotlight h3 em { color: #2f4152; }
+.folio-spotlight .folio-project-premise { color: #23303b; }
+.folio-spotlight .folio-project-copy > p:not(.folio-project-premise) { color: #3e362b; max-width: 46ch; }
+.spotlight-steps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin: 34px 0 6px; padding: 0; counter-reset: spot; }
+.spotlight-steps li { border-top: 1px solid #2f415240; padding-top: 14px; counter-increment: spot; }
+.spotlight-steps b { display: block; font: 400 21px/1.2 var(--serif); letter-spacing: -.02em; color: #23303b; margin-bottom: 7px; }
+.spotlight-steps b::before { content: counter(spot, decimal-leading-zero); display: block; font: 11px var(--mono); color: #b07a3e; letter-spacing: .08em; margin-bottom: 9px; }
+.spotlight-steps span { display: block; font-size: 13.5px; line-height: 1.65; color: #4a4236; }
+.folio-spotlight .folio-tags { color: #4c5a64; }
+.folio-spotlight .folio-cta { color: #23303b; }
+.folio-spotlight .folio-cta:hover { color: #b07a3e; }
+.spotlight-illustration { min-width: 0; color: #2f4152; background: #ede8de; border: 1px solid #2f415233; padding: 10px 10px 22px; }
+.spotlight-illustration .figure-label { color: #4c5a64; }
+.spot-url { font-size: 8.5px; letter-spacing: .3px; }
+.spot-routine, .spot-marks { transition: transform .5s ease; }
+.spot-trace { transition: stroke-dashoffset 1.4s ease; }
+.spotlight-illustration:hover .spot-routine { transform: translateX(-6px); }
+.spotlight-illustration:hover .spot-trace { stroke-dashoffset: -54; }
+
+/* ==========================================================================
+   Research experience — a night plate between Experience and About.
+   ========================================================================== */
+.folio-research { background: var(--night); color: var(--cream); }
+.research-inner { padding-block: 104px 70px; }
+.folio-research .folio-section-head .eyebrow { color: #c4a57c; }
+.folio-research .folio-section-head h2 em { color: #d5a077; }
+.research-lede { color: #cdbd9f; font-size: 16.5px; line-height: 1.75; max-width: 54ch; margin-top: 26px; }
+.research-entry { display: grid; grid-template-columns: .6fr 1.7fr; gap: 35px; border-top: 1px solid var(--night-line); padding: 40px 0 52px; scroll-margin-top: 88px; }
+.research-meta { min-width: 0; }
+.research-status { display: inline-flex; align-items: center; gap: 9px; font: 11px var(--mono); letter-spacing: .04em; color: #d7ae78; }
+.research-status.is-live > span { width: 7px; height: 7px; border-radius: 50%; background: #9fc28a; animation: spot-pulse-live 2.4s ease-out infinite; }
+@keyframes spot-pulse-live { 0% { box-shadow: 0 0 0 0 #9fc28a66; } 70%, 100% { box-shadow: 0 0 0 8px #9fc28a00; } }
+.research-meta h3 { font-size: 29px; line-height: 1.12; margin: 16px 0 14px; color: #f0e2c6; }
+.research-abbr { color: #b39c7a; }
+.research-stack { font: 11px/1.85 var(--mono); color: #bfa987; margin-bottom: 16px; max-width: 30ch; }
+.research-meta .text-link { color: #e0ba8b; font-size: 13px; }
+.research-story { min-width: 0; }
+.research-story h4 { font-size: clamp(25px, 2.3vw, 31px); line-height: 1.22; letter-spacing: -.03em; color: #f3e6cb; max-width: 30ch; margin-bottom: 30px; }
+.research-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; padding-bottom: 28px; margin-bottom: 26px; border-bottom: 1px solid #3d342a; }
+.research-figures > div { display: flex; flex-direction: column; }
+.research-figures strong { font: 400 clamp(38px, 3.8vw, 54px)/1 var(--serif); letter-spacing: -.045em; color: #e4b07c; font-variant-numeric: lining-nums tabular-nums; }
+.research-figures strong small { font-size: 18px; margin-left: 4px; letter-spacing: 0; color: #c99c6c; }
+.research-figures > div > span { font: 11px/1.75 var(--mono); color: #bba786; margin-top: 12px; }
+.research-figures-bench { grid-template-columns: 1fr 2fr; align-items: end; }
+.bench-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 26px; font-size: 14px; color: #e6d8bc; }
+.bench-list li { position: relative; padding-left: 16px; }
+.bench-list li::before { content: ''; position: absolute; left: 0; top: .78em; width: 7px; height: 1px; background: #d7ae78; }
+.research-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; max-width: 72ch; }
+.research-points li { position: relative; padding-left: 26px; font-size: 15.5px; line-height: 1.8; color: #d6c8ad; }
+.research-points li::before { content: ''; position: absolute; left: 0; top: .9em; width: 12px; height: 1px; background: #d7ae78; }
+.research-next { display: flex; gap: 14px; align-items: baseline; margin-top: 26px; font-size: 14.5px; color: #e6d8bc; }
+.research-next > span { font: 11px var(--mono); color: #9fc28a; letter-spacing: .06em; text-transform: uppercase; }
+.folio-research a:focus-visible { outline-color: #d9b583; }
+
+@media (max-width: 1100px) {
+  .spotlight-inner { grid-template-columns: 1fr; gap: 56px; }
+  .spotlight-illustration { max-width: 640px; }
+}
+@media (max-width: 800px) {
+  .research-entry { grid-template-columns: 1fr; gap: 20px; }
+  .research-figures { gap: 18px; }
+}
+@media (max-width: 600px) {
+  .spotlight-inner { padding-block: 64px 70px; gap: 44px; }
+  .spotlight-steps { grid-template-columns: 1fr; gap: 14px; }
+  .folio-spotlight h3 { font-size: clamp(46px, 13vw, 60px); }
+  .research-inner { padding-block: 72px 40px; }
+  .research-lede { font-size: 15.5px; }
+  .research-figures { grid-template-columns: 1fr 1fr; }
+  .research-figures > div:nth-child(3) { grid-column: 1 / -1; }
+  .research-figures-bench { grid-template-columns: 1fr; }
+  .research-figures-bench > div:nth-child(3) { grid-column: auto; }
+  .research-story h4 { font-size: 24px; }
+  .research-points li { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-dot, .research-status.is-live > span { animation: none; }
+  .spot-routine, .spot-marks, .spot-trace { transition: none; }
+}
+@media print {
+  .folio-spotlight, .folio-research { background: none; color: #222; }
+  .research-points li, .research-figures strong, .research-meta h3, .research-story h4 { color: #222; }
+}
