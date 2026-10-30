@@ -1,0 +1,112 @@
+/* ==========================================================================
+   upscale.css — a polish layer on top of styles.css + folio.css.
+   Nothing in the original stylesheets is edited; delete this file and its
+   <link> to get the original site back exactly.
+
+   Sources for every change:
+   - Taste Skill v2 inspector: small text, grey body copy, contrast, lopsided
+     sections, too many font sizes.
+   - Vercel Web Interface Guidelines: focus states, text wrapping, tabular
+     numbers, touch behaviour, reduced motion.
+   The look (palette, typefaces, mono labels, hairlines, layout) is unchanged.
+   ========================================================================== */
+
+/* ---- 1. Readability: nothing meant to be read below 11px ---------------- */
+.folio-topline, .folio-bottomline,
+.folio-intro .eyebrow,
+.folio-number, .folio-tags, .folio-project-copy .eyebrow,
+.figure-label,
+.collection-number, .collection-category, .collection-stack, .collection-foot,
+#project-count,
+.ledger-stack, .ledger-source, .plate-domain,
+.folio-colophon { font-size: 11px; }
+
+.hero-index-note small { font-size: 10px; }
+.atlas-corner { font-size: 10px; }
+.atlas-node { font-size: 11px; }
+.atlas-count, .atlas-field { font-size: 10.5px; }
+.atlas-open, .atlas-instruction { font-size: 12px; }
+.collection-filters button > span { font-size: 10px; }
+
+/* ---- 2. Running text: one step larger, full ink on paper ---------------- */
+.folio-project-copy > p:not(.folio-project-premise),
+.ledger-story > p,
+.folio-about-copy > p { font-size: 16.5px; line-height: 1.8; }
+
+.collection-body p { font-size: 16px; }
+.collection-body .collection-summary { font-size: 17px; }
+.ledger-detail p:not(.ledger-sub),
+.product-plate p { font-size: 14px; }
+.folio-contact-main > div > p { font-size: 15.5px; }
+.folio-credentials p { font-size: 13px; }
+
+/* Body copy on the paper sections was #5d5345 (about 5:1). Set it in a deeper
+   ink so it reads as finished text; keep the softer tone for notes only. */
+.folio-experience .ledger-story > p,
+.folio-about-copy > p,
+.product-plate p,
+.ledger-detail p:not(.ledger-sub) { color: #3e362b; }
+
+/* Low-contrast figure caption flagged by the inspector (3.7:1). */
+.gateway-illustration .figure-label { color: #4a3f31; }
+
+/* ---- 3. The working materials: use the full width ----------------------- */
+@media (min-width: 601px) {
+  .folio-tools > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; }
+  .folio-tools p { font-size: 14px; line-height: 1.8; margin-bottom: 0; }
+  .folio-tools b { font-size: 15px; margin-bottom: 8px; }
+}
+@media (max-width: 600px) {
+  .folio-tools p { font-size: 13.5px; }
+}
+
+/* ---- 4. Type details (Web Interface Guidelines) ------------------------- */
+h1, h2, h3, h4, h5 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+.atlas-node, .atlas-count, .collection-number, .folio-number,
+.hero-index-note, .ledger-results strong, .collection-filters button > span,
+#project-count { font-variant-numeric: tabular-nums; }
+
+/* ---- 5. Focus, touch, anchors ------------------------------------------- */
+a:focus-visible, button:focus-visible, summary:focus-visible,
+input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid #d9b583;
+  outline-offset: 3px;
+}
+.folio-experience a:focus-visible, .folio-about a:focus-visible,
+.case-page a:focus-visible { outline-color: #7a3b2a; }
+
+a, button, summary, label { touch-action: manipulation; -webkit-tap-highlight-color: rgba(217, 181, 131, .18); }
+section[id], [id^="project-"] { scroll-margin-top: 88px; }
+
+@media (pointer: fine) { html { overscroll-behavior-y: none; } }
+
+/* ---- 6. Mobile: the same labels, readable on a phone -------------------- */
+@media (max-width: 600px) {
+  .folio-topline, .folio-intro .eyebrow, .folio-bottomline,
+  .folio-project-copy .eyebrow, .figure-label, .collection-foot,
+  .ledger-source, .folio-colophon { font-size: 10.5px; }
+  .hero-index-note small { font-size: 9.5px; }
+  .hero-index-note p { font-size: 11.5px; }
+  .atlas-corner { font-size: 9px; }
+  .atlas-instruction { font-size: 11.5px; }
+  .folio-project-copy > p:not(.folio-project-premise),
+  .ledger-story > p, .folio-about-copy > p { font-size: 15.5px; }
+  .collection-body p { font-size: 15px; }
+  .folio-contact-main > div > p { font-size: 14.5px; }
+  .switch-side { font-size: 11px; }
+}
+
+/* Safe areas on notched phones in landscape (same gutters otherwise). */
+@supports (padding: max(0px)) {
+  .paper-section, .nav-wrap {
+    padding-left: max(clamp(24px, 6.2vw, 94px), env(safe-area-inset-left));
+    padding-right: max(clamp(24px, 6.2vw, 94px), env(safe-area-inset-right));
+  }
+  @media (max-width: 600px) {
+    .paper-section, .nav-wrap {
+      padding-left: max(23px, env(safe-area-inset-left));
+      padding-right: max(23px, env(safe-area-inset-right));
+    }
+  }
+}

@@ -77,7 +77,7 @@ nav{
 .about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
 .about-img-wrap{position:relative}
 .about-img{
-  width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;
+  width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;
   filter:grayscale(15%) contrast(1.05);
   border:1px solid rgba(201,168,76,.2);
 }
@@ -103,7 +103,7 @@ nav{
 .about-link{
   font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
   color:var(--g);border:1px solid rgba(201,168,76,.4);padding:.5rem 1.1rem;
-  text-decoration:none;font-family:'Inter',sans-serif;transition:all .25s;
+  text-decoration:none;font-family:'Inter',sans-serif;transition:background-color .25s,color .25s,border-color .25s;
 }
 .about-link:hover{background:var(--g);color:var(--dark)}
 .about-link.filled{background:var(--s);color:#fff;border-color:var(--s)}
@@ -123,7 +123,7 @@ nav{
 .ftab{
   font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
   border:1px solid var(--b);background:none;padding:.45rem 1rem;cursor:pointer;
-  font-family:'Inter',sans-serif;color:var(--li);transition:all .2s;
+  font-family:'Inter',sans-serif;color:var(--li);transition:background-color .2s,color .2s,border-color .2s;
 }
 .ftab.active,.ftab:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
 
@@ -235,6 +235,11 @@ footer p.copy{font-size:.78rem;line-height:1.9}
 .site-switch.hint-other .switch-knob{transform:translateX(14px)}
 .site-switch.is-switching .switch-knob{transform:translateX(0)}
 .switch-side:focus-visible,.switch-track:focus-visible{outline:1px solid var(--gl);outline-offset:3px}
+/* upscale: visible keyboard focus everywhere, balanced headings */
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gl);outline-offset:3px}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+a,button{touch-action:manipulation}
 @media(max-width:600px){nav{padding:0 1.1rem}.nb{white-space:nowrap;font-size:.9rem}.site-switch{margin-right:0;gap:.4rem}.switch-side{font-size:.6rem;letter-spacing:.1em}.nl{display:none}}
 @media(prefers-reduced-motion:reduce){.scroll-hint{animation:none}.switch-knob{transition:none}}
 
@@ -268,7 +273,7 @@ footer p.copy{font-size:.78rem;line-height:1.9}
 <!-- HERO with Aditya's photo -->
 <section class="hero">
   <div class="hero-bg">
-    <img src="images/hero.jpg" alt="Aditya Devarakonda at Times Square" fetchpriority="high"/>
+    <img src="images/hero.jpg" alt="Aditya Devarakonda at Times Square" width="1500" height="2000" fetchpriority="high" decoding="async"/>
   </div>
   <div class="hero-content">
     <h1 class="hero-name">Aditya Speaks</h1>
@@ -282,7 +287,7 @@ footer p.copy{font-size:.78rem;line-height:1.9}
 <section class="about-section" id="about">
   <div class="about-inner">
     <div class="about-img-wrap">
-      <img class="about-img" loading="lazy" src="images/portrait.jpg" alt="Aditya Devarakonda"/>
+      <img class="about-img" loading="lazy" decoding="async" src="images/portrait.jpg" alt="Aditya Devarakonda" width="825" height="1100"/>
       <div class="about-img-badge">M.S. Computer Science, UMBC<br/>Philosopher by Night</div>
     </div>
     <div class="about-text">
