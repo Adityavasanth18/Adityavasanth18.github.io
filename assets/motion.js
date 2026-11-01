@@ -156,18 +156,153 @@
     });
   }
 
+  /* ---------- the AD opening ---------- */
+  // Plays once per browser session on the home page (the head script decides).
+  const opening = root.classList.contains("intro");
+  const killIntroCover = () => root.classList.remove("intro");
+  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/·—+";
+  const scramble = (el, { duration = 0.8, delay = 0, text } = {}) => {
+    const final = text != null ? text : el.textContent;
+    if (el._scr) el._scr.kill();
+    const o = { p: 0 };
+    el._scr = gsap.to(o, {
+      p: 1, duration, delay, ease: "none",
+      onUpdate: () => {
+        const n = Math.floor(o.p * final.length);
+        let out = "";
+        for (let i = 0; i < final.length; i++) {
+          const ch = final[i];
+          out += i < n || ch === " " ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+        }
+        el.textContent = out;
+      },
+      onComplete: () => (el.textContent = final),
+    });
+    return el._scr;
+  };
+
+  const runOpening = (charA, charD, onOpen) => {
+    try { sessionStorage.setItem("ad-seen", "1"); } catch {}
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    if (lenis) lenis.stop();
+
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const L = document.createElement("div");
+    L.className = "ad-loader";
+    L.setAttribute("aria-hidden", "true");
+    // Dial ring: 120 engraved ticks that fill as the folio loads.
+    let ticks = "";
+    for (let i = 0; i < 120; i++) {
+      const long = i % 10 === 0;
+      ticks += `<path class="ad-tick" d="M200 ${long ? 14 : 20}V30" transform="rotate(${i * 3} 200 200)" stroke-width="${long ? 1.1 : 0.7}"/>`;
+    }
+    let petals = "";
+    for (let i = 0; i < 6; i++) petals += `<ellipse cx="200" cy="200" rx="58" ry="150" transform="rotate(${i * 30} 200 200)"/>`;
+    L.innerHTML = `
+      <div class="ad-panel ad-panel-l"></div><div class="ad-panel ad-panel-r"></div>
+      <div class="ad-stage"><svg class="ad-ring" viewBox="0 0 400 400">
+        <g fill="none" stroke="#d7ae78">${ticks}
+          <circle class="ad-c1" cx="200" cy="200" r="190" stroke-width=".6" opacity=".55"/>
+          <circle class="ad-c2" cx="200" cy="200" r="162" stroke-width=".5" opacity=".35"/>
+          <g class="ad-petals" stroke-width=".45" opacity=".22">${petals}</g>
+        </g></svg></div>
+      <span class="ad-meta ad-tl">Aditya Devarakonda</span>
+      <span class="ad-meta ad-tr">A collection of work / 2026</span>
+      <span class="ad-meta ad-bl"><b class="ad-count">000</b> Opening the folio</span>
+      <span class="ad-meta ad-br">Systems · Agents · Developer tools</span>
+      <span class="ad-progress"></span>`;
+    document.body.appendChild(L);
+    killIntroCover();
+
+    // The two letters are real type, placed exactly where they will live in the
+    // hero name, then transformed up to the centre as a monogram.
+    const fly = (ch, cls) => {
+      const r = ch.getBoundingClientRect();
+      const cs = getComputedStyle(ch);
+      const el = document.createElement("span");
+      el.className = "ad-fly " + cls;
+      el.textContent = ch.textContent;
+      Object.assign(el.style, {
+        left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px",
+        lineHeight: r.height + "px", fontSize: cs.fontSize, fontStyle: cs.fontStyle, fontWeight: cs.fontWeight,
+        letterSpacing: cs.letterSpacing, color: cs.color,
+      });
+      document.body.appendChild(el);
+      return { el, r, fs: parseFloat(cs.fontSize) };
+    };
+    const A = fly(charA, "ad-a"), D = fly(charD, "ad-d");
+    const size = Math.min(vh * 0.4, vw * 0.48);
+    const sA = size / A.fs, sD = (size * 0.94) / D.fs;
+    const cx = vw / 2, cy = vh / 2;
+    const wA = A.r.width * sA, wD = D.r.width * sD;
+    const startA = { x: cx - wA * 0.32 - (A.r.left + A.r.width / 2), y: cy - (A.r.top + A.r.height / 2), scale: sA };
+    const startD = { x: cx + wD * 0.36 - (D.r.left + D.r.width / 2), y: cy + size * 0.06 - (D.r.top + D.r.height / 2), scale: sD };
+    gsap.set(A.el, startA); gsap.set(D.el, { ...startD, rotation: 8 });
+
+    const ring = $(".ad-ring", L), tickEls = $$(".ad-tick", L), count = $(".ad-count", L);
+    const metas = $$(".ad-meta", L);
+    const prog = { p: 0 };
+    const paint = () => {
+      const lit = Math.round(prog.p * tickEls.length);
+      tickEls.forEach((t, i) => t.setAttribute("opacity", i < lit ? (i % 10 === 0 ? 1 : 0.75) : 0.12));
+      count.textContent = String(Math.round(prog.p * 100)).padStart(3, "0");
+      gsap.set($(".ad-progress", L), { scaleX: prog.p });
+    };
+    paint();
+
+    const loaded = new Promise((r) => (document.readyState === "complete" ? r() : window.addEventListener("load", r, { once: true })));
+    const tlIn = gsap.timeline({ defaults: { ease: EASE } });
+    tlIn.from(ring, { scale: 0.84, rotation: -40, autoAlpha: 0, duration: 1.6, ease: TURN }, 0)
+      .from($$(".ad-c1, .ad-c2, .ad-petals ellipse", L), { drawSVG: "0%", duration: 1.6, stagger: 0.06, ease: "power2.inOut" }, 0.1)
+      .from(A.el, { autoAlpha: 0, yPercent: 26, filter: "blur(18px)", duration: 1.3 }, 0.25)
+      .from(D.el, { autoAlpha: 0, yPercent: 26, rotation: 18, filter: "blur(18px)", duration: 1.3 }, 0.45)
+      .add(() => gsap.set([A.el, D.el], { clearProps: "filter" }))
+      .from(metas, { autoAlpha: 0, duration: 0.6, stagger: 0.08 }, 0.2)
+      .add(() => metas.forEach((m, i) => { if (!m.querySelector("b")) scramble(m, { duration: 0.9, delay: i * 0.08 }); }), 0.2)
+      .to(prog, { p: 0.86, duration: 1.7, ease: "power1.inOut", onUpdate: paint }, 0.15);
+    // Slowly breathe while waiting, if the network is slow.
+    gsap.to($(".ad-petals", L), { rotation: 30, transformOrigin: "50% 50%", duration: 12, ease: "none", repeat: -1 });
+
+    // A click, key or scroll skips ahead.
+    let skipped = false;
+    const skip = () => { if (skipped) return; skipped = true; tlIn.timeScale(4); };
+    ["pointerdown", "keydown", "wheel", "touchstart"].forEach((t) => window.addEventListener(t, skip, { once: true, passive: true }));
+
+    Promise.all([tlIn.then(), loaded]).then(() => {
+      const out = gsap.timeline({ defaults: { ease: TURN } });
+      out.to(prog, { p: 1, duration: 0.45, ease: "power2.out", onUpdate: paint })
+        .add(() => scramble(count, { duration: 0.3, text: "100" }))
+        .addLabel("open", "+=0.12")
+        .to(metas, { autoAlpha: 0, y: (i) => (i < 2 ? -14 : 14), duration: 0.6, ease: "power2.in" }, "open")
+        .to(ring, { scale: 1.9, rotation: 70, autoAlpha: 0, duration: 1.4 }, "open")
+        .to($(".ad-progress", L), { autoAlpha: 0, duration: 0.4 }, "open")
+        .to($(".ad-panel-l", L), { xPercent: -101, duration: 1.35 }, "open+=0.15")
+        .to($(".ad-panel-r", L), { xPercent: 101, duration: 1.35 }, "open+=0.15")
+        .to(A.el, { x: 0, y: 0, scale: 1, duration: 1.5 }, "open+=0.1")
+        .to(D.el, { x: 0, y: 0, scale: 1, rotation: 0, duration: 1.5 }, "open+=0.18")
+        .add(() => onOpen(), "open+=0.55")
+        .add(() => {
+          gsap.set([charA, charD], { autoAlpha: 1 });
+          A.el.remove(); D.el.remove(); L.remove();
+          if (lenis) lenis.start();
+          document.dispatchEvent(new CustomEvent("folio:opened"));
+        }, "open+=1.72");
+    });
+  };
+
   /* ---------- everything that needs real font metrics ---------- */
   const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise((r) => setTimeout(r, 900))]);
 
   fontsReady.then(() => {
     const mm = gsap.matchMedia();
 
-    /* ===== HERO ===== */
+    /* ===== HERO (+ the AD opening on a first visit) ===== */
     const hero = $(".folio-hero");
     if (hero) {
       const intro = $(".folio-intro", hero);
       const h1 = $("h1", intro);
-      const tl = gsap.timeline({ defaults: { ease: EASE }, delay: 0.1 });
+      const tl = gsap.timeline({ defaults: { ease: EASE }, paused: true });
       const show = (els) => gsap.set(els, { visibility: "visible" });
       const top = $$(".folio-topline > *, .folio-bottomline > *", hero);
       show($$(".folio-topline, .folio-bottomline", hero));
@@ -176,15 +311,16 @@
       const eyebrow = $(".eyebrow", intro);
       if (eyebrow) { show(eyebrow); tl.from(eyebrow, { autoAlpha: 0, letterSpacing: "0.5em", duration: 1.2 }, 0.1); }
 
+      let firstA = null, firstD = null, h1Split = null;
       if (h1) {
         show(h1);
-        const s = split(h1, "chars,words");
-        if (s) {
-          const italic = s.chars.filter((c) => c.closest("em"));
-          const roman = s.chars.filter((c) => !c.closest("em"));
+        h1Split = split(h1, "chars,words");
+        if (h1Split) {
+          const italic = h1Split.chars.filter((c) => c.closest("em"));
+          const roman = h1Split.chars.filter((c) => !c.closest("em"));
+          if (opening) { firstA = roman.shift(); firstD = italic.shift(); gsap.set([firstA, firstD], { autoAlpha: 0 }); }
           tl.from(roman, { yPercent: 70, autoAlpha: 0, filter: "blur(12px)", duration: 1.2, stagger: 0.045 }, 0.2)
-            .from(italic, { yPercent: 70, autoAlpha: 0, filter: "blur(12px)", rotation: 6, duration: 1.2, stagger: 0.03 }, 0.55)
-            .add(() => s.revert());
+            .from(italic, { yPercent: 70, autoAlpha: 0, filter: "blur(12px)", rotation: 6, duration: 1.2, stagger: 0.03 }, 0.55);
         }
       }
       const rest = $$(":scope > *", intro).filter((el) => el !== h1 && el !== eyebrow);
@@ -198,6 +334,15 @@
         tl.from(proof, { autoAlpha: 0, y: 22, duration: 0.9, stagger: 0.12 }, 1.35);
         proof.forEach((a, i) => { const st = $("strong", a); const t = st && countUp(st, { paused: true }); if (t) tl.add(t.play(), 1.45 + i * 0.12); });
       }
+      // The dial enters like an instrument being set down.
+      const atlasWrap = $(".folio-atlas-wrap", hero);
+      if (atlasWrap) tl.from(atlasWrap, { opacity: 0, scale: 0.92, rotation: -8, duration: 1.6, ease: TURN }, 0.1);
+
+      const finishHero = () => { if (h1Split) h1Split.revert(); };
+      tl.eventCallback("onComplete", finishHero);
+
+      if (opening && firstA && firstD) runOpening(firstA, firstD, () => tl.play());
+      else { killIntroCover(); tl.delay(0.1).play(); }
 
       // Cursor lamp over the hero world.
       const world = hero.closest(".hero-world") || hero;
@@ -209,11 +354,18 @@
         const lx = gsap.quickTo(lamp, "--lx", { duration: 0.6, ease: "power3" });
         const ly = gsap.quickTo(lamp, "--ly", { duration: 0.6, ease: "power3" });
         gsap.set(lamp, { "--lx": "70%", "--ly": "40%" });
+        // The dial tilts in your hand.
+        const atlas = $(".project-atlas", hero);
+        if (atlas) gsap.set(atlas, { transformPerspective: 1100 });
+        const rx = atlas && gsap.quickTo(atlas, "rotationX", { duration: 0.9, ease: "power3" });
+        const ry = atlas && gsap.quickTo(atlas, "rotationY", { duration: 0.9, ease: "power3" });
         world.addEventListener("pointermove", (e) => {
           const r = world.getBoundingClientRect();
-          lx(((e.clientX - r.left) / r.width) * 100 + "%");
-          ly(((e.clientY - r.top) / r.height) * 100 + "%");
+          const nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
+          lx(nx * 100 + "%"); ly(ny * 100 + "%");
+          if (atlas) { ry((nx - 0.5) * 10); rx((0.5 - ny) * 8); }
         });
+        world.addEventListener("pointerleave", () => { if (atlas) { rx(0); ry(0); } });
       }
 
       // The instrument turns away as you scroll past it.
@@ -224,6 +376,8 @@
         if (atlas) gsap.to(atlas, { rotation: -14, scale: 0.86, yPercent: -10, autoAlpha: 0.25, ease: "none", scrollTrigger: exit });
         if (intro2) gsap.to(intro2, { yPercent: -18, autoAlpha: 0.2, ease: "none", scrollTrigger: exit });
       });
+    } else {
+      killIntroCover();
     }
 
     /* ===== Section headings: the house style ===== */
@@ -267,12 +421,12 @@
       const texts = $$("text", svg);
       gsap.set(draw, { drawSVG: "0%" });
       gsap.set(fade, { autoAlpha: 0 });
-      gsap.set(texts, { autoAlpha: 0, y: 6 });
+      gsap.set(texts, { autoAlpha: 0 });
       return () => {
         const tl = gsap.timeline();
         tl.to(draw, { drawSVG: "100%", duration: 1.5, ease: "power2.inOut", stagger: { amount: 1.1 } }, 0)
           .to(fade, { autoAlpha: 1, duration: 0.9, ease: "power1.out", stagger: { amount: 0.9 } }, 0.25)
-          .to(texts, { autoAlpha: 1, y: 0, duration: 0.6, ease: EASE, stagger: 0.04 }, 0.9);
+          .to(texts, { autoAlpha: 1, duration: 0.6, ease: EASE, stagger: 0.04 }, 0.9);
         return tl;
       };
     };
@@ -283,7 +437,7 @@
       if (label) gsap.set(label, { autoAlpha: 0 });
       onEnter(svg, () => {
         const tl = play();
-        if (label) tl.to(label, { autoAlpha: 1, duration: 0.8 }, 1.4);
+        if (label) tl.to(label, { autoAlpha: 1, duration: 0.5 }, 1.4).add(() => scramble(label, { duration: 0.9 }), 1.4);
         // Plate-specific choreography after it is drawn.
         if (svg.classList.contains("runtime-plate")) {
           tl.from($$(".run-step", svg), { y: -14, autoAlpha: 0, duration: 0.7, ease: "back.out(1.6)", stagger: 0.18 }, 0.6);
@@ -443,9 +597,142 @@
       });
     }
 
+    /* ===== Decoding labels: mono captions type themselves in ===== */
+    $$(".collection-heading .eyebrow, .folio-section-head .eyebrow, .section-introduction .eyebrow, .folio-about-copy > .eyebrow, .contact-prelude .eyebrow")
+      .filter((el) => !el.children.length && el.textContent.trim().length < 60)
+      .forEach((el) => onEnter(el, () => scramble(el, { duration: 0.9, delay: 0.1 }), "top 88%"));
+
+    /* ===== Stacked chapters: each project slides over the last ===== */
+    mm.add("(min-width: 1024px) and (min-height: 640px)", () => {
+      const chapters = [$(".gateway-stage"), $(".folio-storage"), $(".runtime-stage")].filter(Boolean);
+      const made = [];
+      chapters.forEach((ch, i) => {
+        gsap.set(ch, { position: "relative", zIndex: 2 + i });
+        if (i === chapters.length - 1) return;
+        const inner = $(":scope > article, :scope > .folio-storage-inner", ch) || ch.firstElementChild;
+        const shade = document.createElement("div");
+        shade.className = "m-shade";
+        ch.appendChild(shade);
+        made.push(shade);
+        // Short chapters hold at the top; tall ones hold once fully read.
+        const tall = () => ch.offsetHeight > window.innerHeight;
+        const start = () => (tall() ? "bottom bottom" : "top top");
+        // Hold exactly until the next card's top reaches the top of the screen.
+        const end = () => "+=" + (tall() ? window.innerHeight : ch.offsetHeight);
+        const range = { trigger: ch, start, end, scrub: true };
+        const pinST = ScrollTrigger.create({ trigger: ch, start, end, pin: true, pinSpacing: false });
+        // Keyboard users: a focused link must never sit under the next card.
+        ch.addEventListener("focusin", () => {
+          if (pinST.isActive && pinST.progress > 0.05) (lenis ? lenis.scrollTo(pinST.start, { immediate: true }) : window.scrollTo(0, pinST.start));
+        });
+        if (inner) gsap.to(inner, { scale: 0.9, yPercent: -4, transformOrigin: "50% 100%", ease: "none", scrollTrigger: range });
+        gsap.to(shade, { opacity: 0.62, ease: "none", scrollTrigger: range });
+      });
+      return () => made.forEach((m) => m.remove());
+    });
+
+    /* ===== Plates tilt toward the cursor ===== */
+    if (finePointer) {
+      $$(".folio-plate").forEach((svg) => {
+        const box = svg.parentElement;
+        gsap.set(svg, { transformPerspective: 1200 });
+        const rx = gsap.quickTo(svg, "rotationX", { duration: 0.8, ease: "power3" });
+        const ry = gsap.quickTo(svg, "rotationY", { duration: 0.8, ease: "power3" });
+        box.addEventListener("pointermove", (e) => {
+          const r = box.getBoundingClientRect();
+          ry(((e.clientX - r.left) / r.width - 0.5) * 9);
+          rx((0.5 - (e.clientY - r.top) / r.height) * 7);
+        });
+        box.addEventListener("pointerleave", () => { rx(0); ry(0); });
+      });
+    }
+
+    /* ===== Folio index: the page number of the section you are reading ===== */
+    if ($(".folio-hero")) {
+      const idx = document.createElement("div");
+      idx.className = "m-folio";
+      idx.setAttribute("aria-hidden", "true");
+      idx.innerHTML = '<span class="m-folio-n">00</span><span class="m-folio-bar"><i></i></span><span class="m-folio-t">Index</span>';
+      document.body.appendChild(idx);
+      const n = $(".m-folio-n", idx), t = $(".m-folio-t", idx);
+      gsap.to($(".m-folio-bar i", idx), { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
+      const map = [[".hero-world", "00", "Index"], ["#work", "01", "Selected work"], ["#spotlight", "+", "Now building"],
+        ["#all-projects", "02", "Collection"], ["#experience", "03", "Experience"], ["#research", "04", "Research"],
+        ["#approach", "05", "The person"], ["#contact", "06", "Contact"]];
+      let current = "";
+      map.forEach(([sel, num, label]) => {
+        const sec = $(sel);
+        if (!sec) return;
+        ScrollTrigger.create({
+          trigger: sec, start: "top 60%", end: "bottom 60%",
+          onToggle: (self) => {
+            if (!self.isActive || current === sel) return;
+            current = sel;
+            scramble(n, { duration: 0.4, text: num });
+            scramble(t, { duration: 0.6, text: label });
+          },
+        });
+      });
+      const showIdx = () => gsap.to(idx, { opacity: 1, duration: 0.8, delay: 0.6 });
+      if (opening) document.addEventListener("folio:opened", showIdx, { once: true }); else showIdx();
+    }
+
+    /* ===== Closing wordmark: the page ends where the opening began ===== */
+    const colophon = $(".folio-colophon");
+    if (colophon) {
+      const wm = document.createElement("div");
+      wm.className = "m-wordmark";
+      wm.setAttribute("aria-hidden", "true");
+      const word = (txt, tag) => `<${tag} class="m-wm-word">${[...txt].map((c) => `<span class="m-wm-ch">${c}</span>`).join("")}</${tag}>`;
+      wm.innerHTML = word("Aditya", "span") + word("Devarakonda.", "em");
+      colophon.before(wm);
+      const chars = $$(".m-wm-ch", wm);
+      gsap.set(chars, { yPercent: 110 });
+      onEnter(wm, () => gsap.to(chars, { yPercent: 0, duration: 1.3, ease: TURN, stagger: { each: 0.035, from: "start" } }), "top 92%");
+      gsap.fromTo(wm, { xPercent: 3 }, { xPercent: -3, ease: "none", scrollTrigger: { trigger: wm, start: "top bottom", end: "bottom top", scrub: 1 } });
+    }
+
     root.classList.remove("m");
     ScrollTrigger.refresh();
   });
+
+  /* ---------- Cursor: a bronze ring that knows what it is pointing at ---------- */
+  if (finePointer) {
+    const c = document.createElement("div");
+    c.className = "m-cursor is-hidden";
+    c.setAttribute("aria-hidden", "true");
+    c.innerHTML = '<span class="m-cursor-follow"><span class="m-cursor-ring"><span class="m-cursor-label"></span></span></span><span class="m-cursor-dot"></span>';
+    document.body.appendChild(c);
+    root.classList.add("has-cursor");
+    const follow = $(".m-cursor-follow", c), dot = $(".m-cursor-dot", c), label = $(".m-cursor-label", c);
+    const fx = gsap.quickTo(follow, "x", { duration: 0.5, ease: "power3" }), fy = gsap.quickTo(follow, "y", { duration: 0.5, ease: "power3" });
+    const dx = gsap.quickTo(dot, "x", { duration: 0.08 }), dy = gsap.quickTo(dot, "y", { duration: 0.08 });
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      c.classList.remove("is-hidden");
+      fx(e.clientX); fy(e.clientY); dx(e.clientX); dy(e.clientY);
+    }, { passive: true });
+    document.addEventListener("pointerleave", () => c.classList.add("is-hidden"));
+    window.addEventListener("pointerdown", () => c.classList.add("is-down"));
+    window.addEventListener("pointerup", () => c.classList.remove("is-down"));
+    const LABELS = [
+      [".folio-project-copy a, .collection-row summary, a[href^='/work/']", "Open"],
+      [".atlas-node", "Explore"], ["a[href^='mailto:']", "Write"], ["a[download]", "Save"],
+      [".copy-email", "Copy"], ["a[href^='/essays/']", "Read"], ["a[target='_blank']", "Visit"],
+    ];
+    document.addEventListener("pointerover", (e) => {
+      const el = e.target;
+      let state = "", text = "";
+      if (el.closest("input, textarea, [contenteditable]")) state = "is-text";
+      else {
+        for (const [sel, l] of LABELS) if (el.closest(sel)) { state = "is-label"; text = l; break; }
+        if (!state && el.closest("a, button, summary, label, [role='button']")) state = "is-link";
+      }
+      c.classList.remove("is-link", "is-label", "is-text");
+      if (state) c.classList.add(state);
+      if (text && label.textContent !== text) label.textContent = text;
+    });
+  }
 
   /* ---------- Magnet: calls to action lean toward the cursor ---------- */
   if (finePointer) {
