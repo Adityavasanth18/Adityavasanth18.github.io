@@ -1,0 +1,83 @@
+/* Motion layer: Lenis + GSAP. Everything here is inert unless motion.js runs
+   (the <html class="m"> flag is only set when reduced motion is not requested). */
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* Hide the hero copy only until the intro timeline takes over (no flash). */
+.m .folio-topline, .m .folio-intro > *, .m .folio-bottomline,
+.m .case-page h1, .m .case-summary, .m .case-meta { visibility: hidden; }
+
+/* Arriving from another page: start covered, motion.js lifts the curtain. */
+html.curtain-in body::after {
+  content: ""; position: fixed; inset: 0; z-index: 200; background: #1c1916;
+}
+.page-curtain {
+  position: fixed; inset: 0; z-index: 200; background: #1c1916; color: #d7ae78;
+  display: grid; place-items: center; pointer-events: none; will-change: transform;
+}
+.page-curtain svg { width: 44px; height: 44px; }
+.page-curtain::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, #d7ae78 30%, #d7ae78 70%, transparent);
+  opacity: .6;
+}
+
+/* Header: hairline reading progress + hide on the way down */
+.site-header { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.site-header.is-tucked { transform: translateY(-100%); }
+.scroll-progress {
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: #d7ae78; transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+}
+
+/* Split text helpers */
+.m-line-mask { overflow: clip; padding-bottom: .08em; margin-bottom: -.08em; }
+.m-char, .m-word { will-change: transform, opacity, filter; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Hero cursor light: a faint bronze lamp over the engraving */
+.hero-world { position: relative; }
+.hero-lamp {
+  position: absolute; inset: 0; pointer-events: none; z-index: 3; opacity: 0;
+  mix-blend-mode: screen; transition: opacity .6s ease;
+  background: radial-gradient(520px circle at var(--lx, 70%) var(--ly, 40%), rgba(215,174,120,.10), transparent 62%);
+}
+.hero-world:hover .hero-lamp { opacity: 1; }
+
+/* Project rows: a small engraver's nudge on hover */
+@media (hover: hover) {
+  .collection-row .collection-name { display: inline-block; transition: transform .45s cubic-bezier(.2,.7,.2,1), color .3s; }
+  .collection-row summary:hover .collection-name { transform: translateX(8px); color: #e8c48f; }
+  .collection-row .category-mark { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .collection-row summary:hover .category-mark { transform: rotate(90deg); }
+}
+
+/* Scroll-speed marquee between the collection and the experience ledger */
+.m-marquee {
+  overflow: hidden; border-top: 1px solid rgba(215,174,120,.18); border-bottom: 1px solid rgba(215,174,120,.18);
+  padding: clamp(18px, 3vw, 34px) 0; user-select: none; pointer-events: none; margin-top: clamp(28px, 3vw, 44px);
+}
+.m-marquee-track { display: flex; width: max-content; will-change: transform; }
+.m-marquee-row { display: flex; align-items: center; flex-shrink: 0; }
+.m-marquee span {
+  font-family: Newsreader, Georgia, serif; font-size: clamp(44px, 8vw, 120px); line-height: 1;
+  letter-spacing: -.035em; padding: 0 .28em; white-space: nowrap; color: #e9dcc5;
+}
+.m-marquee span:nth-child(4n+2), .m-marquee span:nth-child(4n+4) { font-size: clamp(16px, 2vw, 26px); color: #d7ae78; letter-spacing: 0; }
+.m-marquee span:nth-child(4n+3) { font-style: italic; color: transparent; -webkit-text-stroke: 1px #d7ae78; }
+
+/* Click spark */
+.m-spark { position: fixed; z-index: 250; pointer-events: none; overflow: visible; }
+
+/* Magnetic elements need to be transformable */
+.m-magnet { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header { transition: none; }
+  .hero-lamp, .m-marquee { display: none; }
+}
