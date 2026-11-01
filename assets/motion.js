@@ -338,11 +338,74 @@
       const atlasWrap = $(".folio-atlas-wrap", hero);
       if (atlasWrap) tl.from(atlasWrap, { opacity: 0, scale: 0.92, rotation: -8, duration: 1.6, ease: TURN }, 0.1);
 
-      const finishHero = () => { if (h1Split) h1Split.revert(); };
+      /* Living type: after the intro, the name's letters lean toward the cursor. */
+      const finishHero = () => {
+        if (!h1Split) return;
+        if (!finePointer) { h1Split.revert(); return; }
+        const chars = h1Split.chars;
+        gsap.set(chars, { clearProps: "filter,willChange" });
+        const lifts = chars.map((c) => ({
+          c, italic: !!c.closest("em"),
+          y: gsap.quickTo(c, "y", { duration: 0.7, ease: "power3" }),
+          r: gsap.quickTo(c, "rotation", { duration: 0.9, ease: "power3" }),
+        }));
+        let boxes = null;
+        const measure = () => {
+          const h = h1.getBoundingClientRect();
+          boxes = chars.map((c) => { const r = c.getBoundingClientRect(); return [r.left - h.left + r.width / 2, r.top - h.top + r.height / 2]; });
+        };
+        window.addEventListener("resize", () => (boxes = null));
+        const zone = hero.closest(".hero-world") || hero;
+        zone.addEventListener("pointermove", (e) => {
+          if (!boxes) measure();
+          const h = h1.getBoundingClientRect();
+          const px = e.clientX - h.left, py = e.clientY - h.top;
+          lifts.forEach((l, i) => {
+            const dx = px - boxes[i][0], dy = py - boxes[i][1];
+            const f = Math.exp(-(dx * dx + dy * dy) / (2 * 85 * 85));
+            l.y(-16 * f);
+            l.r((l.italic ? -6 : -3) * f * Math.sign(dx || 1));
+          });
+        });
+        zone.addEventListener("pointerleave", () => lifts.forEach((l) => { l.y(0); l.r(0); }));
+      };
       tl.eventCallback("onComplete", finishHero);
 
-      if (opening && firstA && firstD) runOpening(firstA, firstD, () => tl.play());
-      else { killIntroCover(); tl.delay(0.1).play(); }
+      /* The engraved surface: live guilloché centred on the dial. */
+      let engrave = null;
+      const world0 = hero.closest(".hero-world") || hero;
+      const dial = $(".project-atlas", hero);
+      if (window.Guilloche && dial) {
+        const cv = document.createElement("canvas");
+        cv.className = "m-engrave";
+        cv.setAttribute("aria-hidden", "true");
+        world0.prepend(cv);
+        engrave = window.Guilloche(cv, {
+          center: () => {
+            const w = world0.getBoundingClientRect(), d = dial.getBoundingClientRect();
+            return [d.left - w.left + d.width / 2, d.top - w.top + d.height / 2];
+          },
+          scale: () => Math.max(dial.offsetWidth * 0.62, 260),
+          reveal: 0, alpha: 0.2,
+        });
+        if (!engrave) cv.remove();
+      }
+      const revealEngrave = () => engrave && gsap.to(engrave.state, { reveal: 1, duration: 3.2, ease: "power2.out" });
+      if (engrave) {
+        world0.addEventListener("pointermove", (e) => {
+          const r = world0.getBoundingClientRect();
+          engrave.state.mouse = [e.clientX - r.left, e.clientY - r.top];
+        });
+        world0.addEventListener("pointerenter", () => gsap.to(engrave.state, { loupe: 1, duration: 0.8, ease: "power2.out" }));
+        world0.addEventListener("pointerleave", () => gsap.to(engrave.state, { loupe: 0, duration: 1.2, ease: "power2.out" }));
+        ScrollTrigger.create({
+          trigger: world0, start: "top top", end: "bottom top",
+          onUpdate: (self) => { engrave.state.scroll = self.progress; engrave.state.alpha = 0.2 * (1 - self.progress * 0.7); },
+        });
+      }
+
+      if (opening && firstA && firstD) runOpening(firstA, firstD, () => { tl.play(); revealEngrave(); });
+      else { killIntroCover(); tl.delay(0.1).play(); revealEngrave(); }
 
       // Cursor lamp over the hero world.
       const world = hero.closest(".hero-world") || hero;
@@ -484,6 +547,51 @@
         onEnter(".storage-plate", () => gsap.to([layers[0], layers[2]], { y: 0, duration: 1.4, ease: TURN, delay: 0.8 }));
       }
     });
+
+    /* ===== Collection: an engraved preview card follows the cursor ===== */
+    const list = $(".collection-list");
+    if (list && finePointer) {
+      const peek = document.createElement("div");
+      peek.className = "m-peek";
+      peek.setAttribute("aria-hidden", "true");
+      peek.innerHTML = '<div class="m-peek-top"><span class="m-peek-n"></span><span class="m-peek-cat"></span></div><div class="m-peek-icon"></div><div class="m-peek-name"></div><p class="m-peek-sum"></p><div class="m-peek-stack"></div>';
+      document.body.appendChild(peek);
+      const px = gsap.quickTo(peek, "x", { duration: 0.55, ease: "power3" });
+      const py = gsap.quickTo(peek, "y", { duration: 0.55, ease: "power3" });
+      const pr = gsap.quickTo(peek, "rotation", { duration: 0.8, ease: "power3" });
+      gsap.set(peek, { autoAlpha: 0, scale: 0.85, xPercent: 0, yPercent: -50 });
+      let lastX = 0, current = null, shown = false;
+      const fill = (row) => {
+        const q = (sel) => { const el = $(sel, row); return el ? el.textContent.trim() : ""; };
+        $(".m-peek-n", peek).textContent = q(".collection-number");
+        $(".m-peek-cat", peek).textContent = q(".collection-category");
+        $(".m-peek-name", peek).textContent = q(".collection-name");
+        $(".m-peek-sum", peek).textContent = q(".collection-summary");
+        $(".m-peek-stack", peek).textContent = q(".collection-stack");
+        const icon = $(".category-mark", row);
+        $(".m-peek-icon", peek).replaceChildren(icon ? icon.cloneNode(true) : "");
+      };
+      const show = () => { if (!shown) { shown = true; gsap.to(peek, { autoAlpha: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)", overwrite: "auto" }); } };
+      const hide = () => { if (shown) { shown = false; current = null; gsap.to(peek, { autoAlpha: 0, scale: 0.85, duration: 0.3, ease: "power2.in", overwrite: "auto" }); } };
+      list.addEventListener("pointermove", (e) => {
+        const row = e.target.closest(".collection-row");
+        const onSummary = e.target.closest("summary");
+        if (!row || !onSummary || row.open) return hide();
+        if (row !== current) {
+          current = row; fill(row);
+          gsap.fromTo($$(".m-peek-icon, .m-peek-name, .m-peek-sum, .m-peek-stack", peek), { y: 10, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.04, duration: 0.4, ease: EASE });
+          scramble($(".m-peek-n", peek), { duration: 0.35 });
+        }
+        show();
+        const right = e.clientX + 320 > window.innerWidth;
+        px(right ? e.clientX - 330 : e.clientX + 48); py(e.clientY);
+        pr(gsap.utils.clamp(-7, 7, (e.clientX - lastX) * 0.6));
+        lastX = e.clientX;
+      });
+      list.addEventListener("pointerleave", hide);
+      window.addEventListener("scroll", () => { if (shown && !list.matches(":hover")) hide(); }, { passive: true });
+      list.addEventListener("click", hide);
+    }
 
     /* ===== Collection: rows arrive in reading order ===== */
     const rows = $$(".collection-row");
@@ -655,7 +763,7 @@
       idx.innerHTML = '<span class="m-folio-n">00</span><span class="m-folio-bar"><i></i></span><span class="m-folio-t">Index</span>';
       document.body.appendChild(idx);
       const n = $(".m-folio-n", idx), t = $(".m-folio-t", idx);
-      gsap.to($(".m-folio-bar i", idx), { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
+      gsap.to($(".m-folio-bar i", idx), { scaleY: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
       const map = [[".hero-world", "00", "Index"], ["#work", "01", "Selected work"], ["#spotlight", "+", "Now building"],
         ["#all-projects", "02", "Collection"], ["#experience", "03", "Experience"], ["#research", "04", "Research"],
         ["#approach", "05", "The person"], ["#contact", "06", "Contact"]];
@@ -675,6 +783,27 @@
       });
       const showIdx = () => gsap.to(idx, { opacity: 1, duration: 0.8, delay: 0.6 });
       if (opening) document.addEventListener("folio:opened", showIdx, { once: true }); else showIdx();
+    }
+
+    /* ===== Footer engraving: the same guilloché, quieter, under the name ===== */
+    const contact = $(".folio-contact");
+    if (contact && window.Guilloche) {
+      const cv = document.createElement("canvas");
+      cv.className = "m-engrave";
+      cv.setAttribute("aria-hidden", "true");
+      contact.prepend(cv);
+      const g = window.Guilloche(cv, {
+        center: () => [contact.clientWidth * 0.84, contact.clientHeight * 0.28],
+        scale: () => Math.max(contact.clientWidth * 0.3, 240),
+        reveal: 0, alpha: 0.14, maxDpr: 1.25,
+      });
+      if (!g) cv.remove();
+      else {
+        onEnter(contact, () => gsap.to(g.state, { reveal: 1, duration: 3, ease: "power2.out" }), "top 75%");
+        contact.addEventListener("pointermove", (e) => { const r = contact.getBoundingClientRect(); g.state.mouse = [e.clientX - r.left, e.clientY - r.top]; });
+        contact.addEventListener("pointerenter", () => gsap.to(g.state, { loupe: 1, duration: 0.8 }));
+        contact.addEventListener("pointerleave", () => gsap.to(g.state, { loupe: 0, duration: 1.2 }));
+      }
     }
 
     /* ===== Closing wordmark: the page ends where the opening began ===== */

@@ -146,13 +146,14 @@ html.has-cursor input, html.has-cursor textarea { cursor: text; }
 
 /* ===================== Folio index (page number) ===================== */
 .m-folio {
-  position: fixed; left: 26px; bottom: 24px; z-index: 60; display: flex; align-items: center; gap: 12px;
-  font: 10.5px/1 "Plex Mono", ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase;
+  position: fixed; left: 16px; top: 50%; z-index: 60; display: flex; align-items: center; gap: 12px;
+  writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg);
+  font: 10px/1 "Plex Mono", ui-monospace, monospace; letter-spacing: .18em; text-transform: uppercase;
   color: #a8916d; pointer-events: none; opacity: 0;
 }
-.m-folio-n { min-width: 2ch; color: #d7ae78; }
-.m-folio-bar { width: 54px; height: 1px; background: rgba(168,145,109,.3); position: relative; overflow: hidden; }
-.m-folio-bar i { position: absolute; inset: 0; background: #c49a67; transform-origin: 0 50%; transform: scaleX(0); }
+.m-folio-n { color: #d7ae78; }
+.m-folio-bar { width: 1px; height: 64px; background: rgba(168,145,109,.3); position: relative; overflow: hidden; }
+.m-folio-bar i { position: absolute; inset: 0; background: #c49a67; transform-origin: 50% 0; transform: scaleY(0); }
 @media (max-width: 1023px) { .m-folio { display: none; } }
 
 /* ===================== Stacked chapters ===================== */
@@ -169,3 +170,26 @@ html.has-cursor input, html.has-cursor textarea { cursor: text; }
 .m-wordmark .m-wm-word { display: inline-block; overflow: clip; padding: 0 .04em .12em; margin-bottom: -.12em; }
 .m-wordmark .m-wm-ch { display: inline-block; will-change: transform; }
 @media (max-width: 640px) { .m-wordmark { flex-direction: column; align-items: flex-start; gap: 0; font-size: 21vw; } }
+
+/* ===================== Guilloché engraving ===================== */
+.m-engrave { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: block; }
+.hero-world > :not(.m-engrave):not(.hero-lamp) { position: relative; z-index: 1; }
+.folio-contact > .paper-section { z-index: 1; }
+
+/* ===================== Living type ===================== */
+.folio-intro h1 .m-char { display: inline-block; transform-origin: 50% 80%; }
+
+/* ===================== Collection preview card ===================== */
+.m-peek {
+  position: fixed; left: 0; top: 0; z-index: 70; width: 280px; padding: 20px 22px 18px; pointer-events: none;
+  background: linear-gradient(160deg, #332a21, #241e18); color: #eadcc4; border: 1px solid rgba(215,174,120,.32);
+  box-shadow: 0 30px 70px -24px rgba(0,0,0,.7), inset 0 0 0 5px #241e18, inset 0 0 0 6px rgba(215,174,120,.16);
+  border-radius: 3px; transform-origin: 0% 50%; will-change: transform, opacity;
+}
+.m-peek-top { display: flex; justify-content: space-between; font: 10px/1 "Plex Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: #b9a07c; }
+.m-peek-n { color: #d7ae78; }
+.m-peek-icon { width: 46px; height: 46px; margin: 20px 0 14px; color: #d7ae78; }
+.m-peek-icon svg { width: 100%; height: 100%; }
+.m-peek-name { font-family: Newsreader, Georgia, serif; font-size: 27px; line-height: 1.05; letter-spacing: -.02em; }
+.m-peek-sum { margin: 10px 0 14px; font-size: 12.5px; line-height: 1.55; color: #c6b497; }
+.m-peek-stack { font: 9.5px/1.5 "Plex Mono", ui-monospace, monospace; letter-spacing: .08em; color: #9f8a6a; border-top: 1px solid rgba(215,174,120,.18); padding-top: 10px; }
