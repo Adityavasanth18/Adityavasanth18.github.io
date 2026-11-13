@@ -101,3 +101,19 @@
 }
 
 @media print { .atlas-featured { display: none; } }
+
+/* ---- 3D project models (plates3d.js). Inert without its classes. ---- */
+.plate3d-host { position: relative; }
+.plate3d-canvas { position: absolute; display: block; pointer-events: none; }
+.plate3d-host:not(.has-plate3d) .plate3d-canvas { visibility: hidden; }
+@media screen {
+  /* The flat drawing steps aside once its model has painted; its title stays. */
+  /* opacity, not visibility: the scroll animations set visibility on inner shapes. */
+  .has-plate3d svg > :not(defs):not(.plate-label) { opacity: 0 !important; }
+}
+/* Callouts that pointed at parts of the flat gateway drawing no longer line up. */
+@media screen {
+  [data-plate3d="gateway"].has-plate3d svg text.plate-label,
+  [data-plate3d="gateway"].has-plate3d svg g.plate-label > :nth-child(n+3) { opacity: 0 !important; }
+}
+@media print { .plate3d-canvas { display: none !important; } }
