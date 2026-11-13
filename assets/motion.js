@@ -236,9 +236,9 @@
     const sA = size / A.fs, sD = (size * 0.94) / D.fs;
     const cx = vw / 2, cy = vh / 2;
     const wA = A.r.width * sA, wD = D.r.width * sD;
-    const startA = { x: cx - wA * 0.32 - (A.r.left + A.r.width / 2), y: cy - (A.r.top + A.r.height / 2), scale: sA };
-    const startD = { x: cx + wD * 0.36 - (D.r.left + D.r.width / 2), y: cy + size * 0.06 - (D.r.top + D.r.height / 2), scale: sD };
-    gsap.set(A.el, startA); gsap.set(D.el, { ...startD, rotation: 8 });
+    const startA = { x: cx - wA * 0.36 - (A.r.left + A.r.width / 2), y: cy - (A.r.top + A.r.height / 2), scale: sA };
+    const startD = { x: cx + wD * 0.40 - (D.r.left + D.r.width / 2), y: cy + size * 0.06 - (D.r.top + D.r.height / 2), scale: sD };
+    gsap.set(A.el, startA); gsap.set(D.el, { ...startD, rotation: 0 });
 
     const ring = $(".ad-ring", L), tickEls = $$(".ad-tick", L), count = $(".ad-count", L);
     const metas = $$(".ad-meta", L);
@@ -256,7 +256,7 @@
     tlIn.from(ring, { scale: 0.84, rotation: -40, autoAlpha: 0, duration: 1.6, ease: TURN }, 0)
       .from($$(".ad-c1, .ad-c2, .ad-petals ellipse", L), { drawSVG: "0%", duration: 1.6, stagger: 0.06, ease: "power2.inOut" }, 0.1)
       .from(A.el, { autoAlpha: 0, yPercent: 26, filter: "blur(18px)", duration: 1.3 }, 0.25)
-      .from(D.el, { autoAlpha: 0, yPercent: 26, rotation: 18, filter: "blur(18px)", duration: 1.3 }, 0.45)
+        .from(D.el, { autoAlpha: 0, yPercent: 26, rotation: 6, filter: "blur(18px)", duration: 1.3 }, 0.45)
       .add(() => gsap.set([A.el, D.el], { clearProps: "filter" }))
       .from(metas, { autoAlpha: 0, duration: 0.6, stagger: 0.08 }, 0.2)
       .add(() => metas.forEach((m, i) => { if (!m.querySelector("b")) scramble(m, { duration: 0.9, delay: i * 0.08 }); }), 0.2)
@@ -266,11 +266,13 @@
 
     // A click, key or scroll skips ahead.
     let skipped = false;
-    const skip = () => { if (skipped) return; skipped = true; tlIn.timeScale(4); };
+    let out = null;
+    const skip = () => { if (skipped) return; skipped = true; tlIn.timeScale(5); if (out) out.timeScale(3); };
+    tlIn.timeScale(1.7); // brisk: the page is the point, the monogram is the greeting
     ["pointerdown", "keydown", "wheel", "touchstart"].forEach((t) => window.addEventListener(t, skip, { once: true, passive: true }));
 
     Promise.all([tlIn.then(), loaded]).then(() => {
-      const out = gsap.timeline({ defaults: { ease: TURN } });
+      out = gsap.timeline({ defaults: { ease: TURN } }).timeScale(skipped ? 3 : 1.6);
       out.to(prog, { p: 1, duration: 0.45, ease: "power2.out", onUpdate: paint })
         .add(() => scramble(count, { duration: 0.3, text: "100" }))
         .addLabel("open", "+=0.12")
@@ -767,7 +769,7 @@
       const n = $(".m-folio-n", idx), t = $(".m-folio-t", idx);
       gsap.to($(".m-folio-bar i", idx), { scaleY: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
       const map = [[".hero-world", "00", "Index"], ["#work", "01", "Selected work"], ["#spotlight", "+", "Now building"],
-        ["#all-projects", "02", "Collection"], ["#experience", "03", "Experience"], ["#research", "04", "Research"],
+        ["#experience", "02", "Experience"], ["#research", "03", "Research"], ["#all-projects", "04", "Collection"],
         ["#approach", "05", "The person"], ["#contact", "06", "Contact"]];
       let current = "";
       map.forEach(([sel, num, label]) => {
