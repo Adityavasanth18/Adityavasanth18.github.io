@@ -9,7 +9,7 @@ instrument. It is the first thing a visitor sees.
 
 ## Goals
 - The dial in the hero reads as a real metal object: depth, bevels, lighting.
-- Same place, same size, same 24 projects, same selection behaviour
+- Same place, same size, same 23 projects, same selection behaviour
   (click, arrow keys, centre title, "open" link, sector arcs).
 - It tilts toward the cursor and turns as the page scrolls.
 

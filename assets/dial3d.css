@@ -1,0 +1,7 @@
+/* 3D hero dial. Inert unless dial3d.js adds these classes. */
+.folio-atlas-wrap.dial3d-host { position: relative; }
+.dial3d-canvas {
+  position: absolute; pointer-events: none; opacity: 0;
+  transition: opacity .9s ease;
+}
+.folio-atlas-wrap.has-dial3d .dial3d-canvas { opacity: 1; }
