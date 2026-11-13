@@ -426,7 +426,9 @@
           const r = world.getBoundingClientRect();
           const nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
           lx(nx * 100 + "%"); ly(ny * 100 + "%");
-          if (atlas) { ry((nx - 0.5) * 10); rx((0.5 - ny) * 8); }
+          // The solid 3D dial (dial3d.js) can take a deeper tilt than the flat drawing.
+          const deep = window.__dial3d && window.__dial3d.state === "ready" ? 2.4 : 1;
+          if (atlas) { ry((nx - 0.5) * 10 * deep); rx((0.5 - ny) * 8 * deep); }
         });
         world.addEventListener("pointerleave", () => { if (atlas) { rx(0); ry(0); } });
       }

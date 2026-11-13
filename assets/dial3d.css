@@ -1,7 +1,13 @@
 /* 3D hero dial. Inert unless dial3d.js adds these classes. */
 .folio-atlas-wrap.dial3d-host { position: relative; }
-.dial3d-canvas {
-  position: absolute; pointer-events: none; opacity: 0;
-  transition: opacity .9s ease;
+.dial3d-canvas { display: block; position: absolute; pointer-events: none; }
+.folio-atlas-wrap:not(.has-dial3d) .dial3d-canvas { visibility: hidden; }
+
+/* Once the metal is on screen, the flat drawing of it steps aside.
+   The category arcs (.atlas-sectors), buttons and centre text stay. */
+@media screen {
+  .has-dial3d .atlas-geometry > circle,
+  .has-dial3d .atlas-geometry > g > *:not(.atlas-sectors) { display: none; }
 }
-.folio-atlas-wrap.has-dial3d .dial3d-canvas { opacity: 1; }
+/* On paper the flat drawing prints; a WebGL canvas would print blank. */
+@media print { .dial3d-canvas { display: none !important; } }
